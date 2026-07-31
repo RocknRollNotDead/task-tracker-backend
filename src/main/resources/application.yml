@@ -7,7 +7,7 @@ server:
 spring:
   application:
     name:
-      tack-scheduler
+      task-tracker
   session:
     store-type: redis
     timeout: 7d
