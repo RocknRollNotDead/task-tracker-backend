@@ -6,7 +6,6 @@ public record RequestTaskDto(
         @NotBlank(message = "Task name can't be empty!")
         String name,
 
-        @NotBlank(message = "Task can't be empty!")
         String text
 ) {
 }
