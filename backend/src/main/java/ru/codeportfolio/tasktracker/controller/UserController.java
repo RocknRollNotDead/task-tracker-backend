@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.dto.UserDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
@@ -29,10 +31,10 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<UserDto> createUser(HttpServletRequest httpRequest,
                                               HttpServletResponse response,
-                                              @Valid @RequestBody RequestAuthDto req) {
+                                              @Valid @RequestBody RequestRegistrationDto req) {
 
         UserDto userDto = service.createUser(req);
-        authenticationService.auth(httpRequest, response, req);
+        authenticationService.auth(httpRequest, response, new RequestAuthDto(req.email(), req.password()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
@@ -40,7 +42,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<UserDto> getInfo(
 
-            @AuthenticationPrincipal CustomUserDetails principal) {
+            @AuthenticationPrincipal CustomUserDetails principal) throws AuthenticationException {
 
         UserDto userDto = service.getInfo(principal.getId());
 
