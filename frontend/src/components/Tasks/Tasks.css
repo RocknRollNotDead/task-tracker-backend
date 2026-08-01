@@ -1,0 +1,253 @@
+.content {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 36px 28px 80px;
+}
+
+.content__intro {
+  margin-bottom: 28px;
+}
+
+.content__intro h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0 0 4px;
+}
+
+.content__intro p {
+  color: var(--text-dim);
+  margin: 0;
+  font-size: 14.5px;
+}
+
+/* --- Composer --- */
+.composer {
+  margin-bottom: 32px;
+}
+
+.composer__row {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+}
+
+.composer__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 17px;
+  font-family: var(--font-body);
+  color: var(--text);
+  padding: 6px 2px;
+}
+
+.composer__input::placeholder {
+  color: var(--text-faint);
+}
+
+.composer__input:focus {
+  outline: none;
+}
+
+.composer__error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+/* --- Columns / sections --- */
+.task-columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .task-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.task-section__header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.task-section__header h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.task-section__count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.task-section__empty {
+  color: var(--text-faint);
+  font-size: 13.5px;
+  padding: 10px 0;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 6px;
+  border-radius: var(--radius);
+  transition: background 0.12s ease;
+}
+
+.task-row:hover {
+  background: var(--surface);
+}
+
+.task-row__index {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  width: 26px;
+  flex-shrink: 0;
+}
+
+.task-row__stamp {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: transparent;
+}
+
+.task-row__stamp--done {
+  border-color: var(--done);
+  color: var(--done);
+  transform: rotate(-6deg);
+}
+
+.task-row__name {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.task-row--done .task-row__name {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--text-faint);
+}
+
+.task-row__hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* --- Task detail modal extras --- */
+.task-done-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.task-done-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--done);
+}
+
+.save-indicator {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.save-indicator--saving {
+  color: var(--text-dim);
+}
+
+.save-indicator--saved {
+  color: var(--done);
+}
+
+.save-indicator--error {
+  color: var(--danger);
+}
+
+/* --- Empty state (unauthenticated) --- */
+.landing {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 100px 28px;
+  text-align: center;
+}
+
+.landing__mark {
+  font-size: 34px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.landing h1 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  margin: 0 0 10px;
+}
+
+.landing p {
+  color: var(--text-dim);
+  font-size: 15px;
+  margin: 0 0 24px;
+}
+
+.landing__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* --- Loading / error --- */
+.state-banner {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.state-banner--error {
+  color: var(--danger);
+}

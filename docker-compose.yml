@@ -18,19 +18,20 @@ services:
     ports:
       - "5432:5432"
 
-#  frontend:
-#    build:
-#      context: ./frontend
-#      args:
-#        NGINX_ENV: .dev
-#    ports:
-#      - "80:80"
+  frontend:
+    container_name: task-frontend
+    build:
+      context: ./frontend
+      args:
+        NGINX_ENV: .dev
+    ports:
+      - "80:80"
 
   app:
     container_name: task-app
-    build: .
+    build: ./backend
     env_file:
-      - .env
+      - backend/.env
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
