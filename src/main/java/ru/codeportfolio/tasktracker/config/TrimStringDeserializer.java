@@ -1,0 +1,14 @@
+package ru.codeportfolio.tasktracker.config;
+
+
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+
+public class TrimStringDeserializer extends ValueDeserializer<String> {
+    @Override
+    public String deserialize(JsonParser jsonParser, DeserializationContext context) {
+        String value = jsonParser.getValueAsString();
+        return value != null ? value.trim() : null;
+    }
+}

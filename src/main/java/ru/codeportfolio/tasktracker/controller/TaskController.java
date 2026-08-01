@@ -1,17 +1,17 @@
 package ru.codeportfolio.tasktracker.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.RequestTaskDto;
 import ru.codeportfolio.tasktracker.dto.TaskDto;
-import ru.codeportfolio.tasktracker.dto.UserDto;
-import ru.codeportfolio.tasktracker.exception.ValidationException;
+import ru.codeportfolio.tasktracker.exception.entity.ValidationException;
+import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.TaskService;
+
+import java.util.List;
 
 
 @RestController
@@ -23,37 +23,46 @@ public class TaskController {
         this.service = service;
     }
 
-    @Operation(summary = "Создать заметку")
-    @ApiResponse(responseCode = "201", description = "Успех")
-    @ApiResponse(responseCode = "400", description = "Невалидный аргумент (пароль или username)")
-    @ApiResponse(responseCode = "409", description = "username занят другим пользователем")
     @PostMapping()
-    public ResponseEntity<UserDto> createTask(
-            @RequestBody(required = false) RequestAuthDto req) {
+    public ResponseEntity<TaskDto> createTask(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @Valid @RequestBody(required = false) RequestTaskDto request) {
 
-        if (req == null) {
-            throw new ValidationException("Bad request - no username and password");
+        if (request == null) {
+            throw new ValidationException("Bad request - no body");
         }
 
-        UserDto userDto = service.createUser(req.username(), req.password(), req.email()); // email +
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        TaskDto taskDto = service.create(principal.getId(), request); // email +
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskDto);
     }
 
-
-    @Operation(summary = "Получить заметки")
-    @ApiResponse(responseCode = "200", description = "Успешно получена информация")
-    @ApiResponse(responseCode = "401", description = "Пользователь не авторизован")
     @GetMapping()
-    public ResponseEntity<UserDto> getTasks(@AuthenticationPrincipal UserDetails principal) { // тот обьект который в SecurityConfig
+    public ResponseEntity<List<TaskDto>> getTasks(@AuthenticationPrincipal CustomUserDetails principal) { // тот обьект который в SecurityConfig
 
-        UserDto userDto = service.getTasks(principal.getUsername());
-        return ResponseEntity.ok(userDto);
+        List<TaskDto> result = service.get(principal.getId());
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping()
-    public ResponseEntity<TaskDto> patchTask(@AuthenticationPrincipal UserDetails principal){
-        TaskDto dto = service.patchTask();
+    public ResponseEntity<TaskDto> executeTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId){
+        TaskDto dto = service.patch(principal.getId(), taskId);
         return ResponseEntity.ok(dto);
     }
+
+    @PatchMapping("/edit")
+    public ResponseEntity<TaskDto> editTask(@AuthenticationPrincipal CustomUserDetails principal,
+                                            @RequestParam Long taskId,
+                                            @RequestParam RequestTaskDto dto){
+        TaskDto taskDto = service.edit(principal.getId(), taskId, dto);
+        return ResponseEntity.ok(taskDto);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId){
+        service.delete(principal.getId(), taskId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }

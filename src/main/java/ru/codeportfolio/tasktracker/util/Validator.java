@@ -1,10 +1,13 @@
 package ru.codeportfolio.tasktracker.util;
 
 
-import ru.codeportfolio.tasktracker.exception.ValidationException;
+import org.springframework.beans.factory.annotation.Value;
+import ru.codeportfolio.tasktracker.exception.entity.ValidationException;
 
 public final class Validator {
-    private final static int minLengthPassword = 5;
+
+    @Value("${validate.password.length.min}")
+    private static int minLengthPassword;
 
     private Validator() {
     }
