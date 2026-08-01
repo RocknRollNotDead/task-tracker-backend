@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.dto.UserDto;
 import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
@@ -30,7 +30,7 @@ public class UserService {
     }
 
 
-    public UserDto createUser(RequestAuthDto dto) {
+    public UserDto createUser(RequestRegistrationDto dto) {
 
 
         String password = passwordEncoder.encode(dto.password());
@@ -59,7 +59,7 @@ public class UserService {
         return new UserDto(user.getId(), user.getEmail());
     }
 
-    private static void throwSaveException(RequestAuthDto dto, DataIntegrityViolationException e) {
+    private static void throwSaveException(RequestRegistrationDto dto, DataIntegrityViolationException e) {
         Throwable rootCause = e.getMostSpecificCause();
 
         if (rootCause instanceof PSQLException psqlEx) {

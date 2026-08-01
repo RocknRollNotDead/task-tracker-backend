@@ -52,7 +52,7 @@ public class TaskController {
     @PatchMapping("/edit")
     public ResponseEntity<TaskDto> editTask(@AuthenticationPrincipal CustomUserDetails principal,
                                             @RequestParam Long taskId,
-                                            @RequestParam RequestTaskDto dto){
+                                            @RequestBody RequestTaskDto dto){
         TaskDto taskDto = service.edit(principal.getId(), taskId, dto);
         return ResponseEntity.ok(taskDto);
     }

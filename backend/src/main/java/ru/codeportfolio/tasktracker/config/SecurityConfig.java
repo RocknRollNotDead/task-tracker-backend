@@ -1,8 +1,10 @@
 package ru.codeportfolio.tasktracker.config;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +21,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -38,10 +41,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/api/auth/**",
+                                .requestMatchers("/auth/**",
                                         "/v3/api-docs/**", "/swagger-ui/**", "/v3/api-docs.yaml",
-                                        "/api/v3/api-docs/**", "/swagger-ui.html"
+                                        "/v3/api-docs/**", "/swagger-ui.html"
                                 ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions -> exceptions
@@ -56,7 +61,7 @@ public class SecurityConfig {
                         })
                 )
                 .logout(logout -> logout
-                                .logoutUrl("/api/auth/sign-out")
+                                .logoutUrl("/auth/sign-out")
                                 .logoutSuccessHandler((
                                         request, response, authentication) -> {
                                     if (authentication == null) {
@@ -66,7 +71,6 @@ public class SecurityConfig {
                                     }
 
                                 })
-//                        .permitAll()
                 );
 
         return http.build();
@@ -81,13 +85,14 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                 User user = userRepository
-                        .findUsersByLogin(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("username not exist " + username));
+                        .findUsersByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("email not exist " + email));
                 return new CustomUserDetails(user);
             }
         };
+
     }
 
     private Map<String, String> buildResponse(String message) {
