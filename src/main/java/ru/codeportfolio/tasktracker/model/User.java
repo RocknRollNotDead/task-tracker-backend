@@ -12,20 +12,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 45)
-    private String login;
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private Role role;
 
-    public User(String login, String password, Role role, String email) {
-        this.login = login;
+    public User(String username, String password, Role role, String email) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
