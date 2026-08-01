@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
+import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.model.User;
 import tools.jackson.databind.ObjectMapper;
 
@@ -84,11 +85,7 @@ public class SecurityConfig {
                 User user = userRepository
                         .findUsersByLogin(username)
                         .orElseThrow(() -> new UsernameNotFoundException("username not exist " + username));
-                return org.springframework.security.core.userdetails.User
-                        .withUsername(username)
-                        .password(user.getPassword())
-                        .authorities(user.getRole().getAuthority())
-                        .build();
+                return new CustomUserDetails(user);
             }
         };
     }
