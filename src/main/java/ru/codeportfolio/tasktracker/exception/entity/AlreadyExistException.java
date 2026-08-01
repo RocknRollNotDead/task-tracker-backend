@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.exception;
+package ru.codeportfolio.tasktracker.exception.entity;
 
 public class AlreadyExistException extends RuntimeException {
     public AlreadyExistException(String message) {

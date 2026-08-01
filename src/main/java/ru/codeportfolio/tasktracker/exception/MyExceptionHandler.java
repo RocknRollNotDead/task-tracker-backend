@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.exception.other;
+package ru.codeportfolio.tasktracker.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -6,12 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.codeportfolio.exception.AlreadyExistException;
-import ru.codeportfolio.exception.NotFoundException;
-import ru.codeportfolio.exception.OutOfMemoryException;
-import ru.codeportfolio.exception.ValidationException;
+import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
+import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
+import ru.codeportfolio.tasktracker.exception.entity.OutOfMemoryException;
+import ru.codeportfolio.tasktracker.exception.entity.ValidationException;
 
 import java.util.Map;
 
@@ -29,6 +30,12 @@ public class MyExceptionHandler {
     public ResponseEntity<Map<String, String>> handleGeneric(BadCredentialsException e) {
 
         return buildResponse(HttpStatus.UNAUTHORIZED, "Not right login or password!");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleGeneric(MethodArgumentNotValidException e) {
+
+        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
