@@ -56,7 +56,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User not found in db"));
 
-        return new UserDto(user.getId(), user.getEmail());
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail());
     }
 
     private static void throwSaveException(RequestRegistrationDto dto, DataIntegrityViolationException e) {

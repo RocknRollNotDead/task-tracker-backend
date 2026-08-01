@@ -16,9 +16,7 @@ public final class TaskMapper {
                 task.getId(),
                 task.getName(),
                 task.getText(),
-                new UserDto(
-                        task.getOwner().getId(),
-                        task.getOwner().getEmail()),
+                UserMapper.execute(task.getOwner()),
                 task.getStatus(),
                 task.getTimestamp());
     }

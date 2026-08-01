@@ -14,12 +14,10 @@ public class UsersDbInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TaskRepository taskRepository;
 
-    public UsersDbInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder, TaskRepository taskRepository) {
+    public UsersDbInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.taskRepository = taskRepository;
     }
 
     @Override

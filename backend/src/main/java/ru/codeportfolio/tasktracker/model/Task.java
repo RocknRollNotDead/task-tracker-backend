@@ -48,10 +48,14 @@ public class Task {
 
     public void setStatus(){
         if (status == Status.DONE){
-            throw new AlreadyExistException("This status %s already exist".formatted(Status.DONE));
+//            throw new AlreadyExistException("This status %s already exist".formatted(Status.DONE));
+            // я ввобще хотел сделать так ^, но увидел, что в тз необходим обратный разворот
+            status = Status.IN_PROGRESS;
+            timestamp = null;
+        } else {
+            status = Status.DONE;
+            timestamp = Timestamp.from(Instant.now());
         }
-        status = Status.DONE;
-        timestamp = Timestamp.from(Instant.now());
     }
 
 }

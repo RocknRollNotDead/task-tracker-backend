@@ -11,6 +11,7 @@ public final class UserMapper {
     public static UserDto execute(User user){
         return new UserDto(
                 user.getId(),
+                user.getUsername(),
                 user.getEmail()
         );
     }
