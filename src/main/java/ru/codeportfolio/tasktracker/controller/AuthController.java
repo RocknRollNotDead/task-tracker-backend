@@ -1,71 +1,44 @@
 package ru.codeportfolio.tasktracker.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
 import ru.codeportfolio.tasktracker.dto.UserDto;
-import ru.codeportfolio.tasktracker.exception.ValidationException;
-import ru.codeportfolio.tasktracker.service.UserService;
-import ru.codeportfolio.tasktracker.util.Validator;
+import ru.codeportfolio.tasktracker.model.CustomUserDetails;
+import ru.codeportfolio.tasktracker.service.AuthenticationService;
 
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserService service;
+    private final AuthenticationService authenticationService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService service) {
-        this.authenticationManager = authenticationManager;
-        this.service = service;
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
-    @Operation(summary = "Авторизоваться")
-    @ApiResponse(responseCode = "200", description = "Успех")
-    @ApiResponse(responseCode = "401", description = "Неправильные пароль или username (отсутствуют совпадения в бд)")
+
     @PostMapping("/login")
     public ResponseEntity<UserDto> logIn(HttpServletRequest httpRequest,
                                          HttpServletResponse response,
-                                         @RequestBody(required = false) RequestAuthDto req) {
+                                         @Valid @RequestBody RequestAuthDto req) {
 
-        if (req == null) {
-            throw new ValidationException("Invalid request! Body of request or username or password is empty!");
-        }
 
-        Validator.validateUsername(req.username());
-        Validator.validatePassword(req.password());
+        CustomUserDetails principal = authenticationService.auth(httpRequest, response, req);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.username(),
-                        req.password()
-                )
+        UserDto userDto = new UserDto(
+                principal.getId(),
+                principal.getEmail()
         );
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-
-        SecurityContextRepository repository = new HttpSessionSecurityContextRepository();
-        repository.saveContext(context, httpRequest, response);
-
-        return ResponseEntity.ok(new UserDto(req.username()));
+        return ResponseEntity.ok(userDto);
 
 
     }

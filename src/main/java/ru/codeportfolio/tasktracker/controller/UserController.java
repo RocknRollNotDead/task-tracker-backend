@@ -1,15 +1,16 @@
 package ru.codeportfolio.tasktracker.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
 import ru.codeportfolio.tasktracker.dto.UserDto;
-import ru.codeportfolio.tasktracker.exception.ValidationException;
+import ru.codeportfolio.tasktracker.model.CustomUserDetails;
+import ru.codeportfolio.tasktracker.service.AuthenticationService;
 import ru.codeportfolio.tasktracker.service.UserService;
 
 
@@ -18,35 +19,31 @@ import ru.codeportfolio.tasktracker.service.UserService;
 public class UserController {
 
     private final UserService service;
+    private final AuthenticationService authenticationService;
 
-    public UserController(UserService service) {
+    public UserController(UserService service, AuthenticationService authenticationService) {
         this.service = service;
+        this.authenticationService = authenticationService;
     }
 
-    @Operation(summary = "Зарегистрироваться")
-    @ApiResponse(responseCode = "201", description = "Успех")
-    @ApiResponse(responseCode = "400", description = "Невалидный аргумент (пароль или username)")
-    @ApiResponse(responseCode = "409", description = "username занят другим пользователем")
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserDto> createUser(
-            @RequestBody(required = false) RequestAuthDto req) {
+    @PostMapping()
+    public ResponseEntity<UserDto> createUser(HttpServletRequest httpRequest,
+                                              HttpServletResponse response,
+                                              @Valid @RequestBody RequestAuthDto req) {
 
-        if (req == null) {
-            throw new ValidationException("Bad request - no username and password");
-        }
-
-        UserDto userDto = service.createUser(req.username(), req.password(), req.email());// email +
+        UserDto userDto = service.createUser(req);
+        authenticationService.auth(httpRequest, response, req);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
 
-    @Operation(summary = "Получить информация о юзере")
-    @ApiResponse(responseCode = "200", description = "Успешно получена информация")
-    @ApiResponse(responseCode = "401", description = "Пользователь не авторизован")
-    @GetMapping("/me")
-    public ResponseEntity<UserDto> getInfo(@AuthenticationPrincipal UserDetails principal) { // тот обьект который в SecurityConfig
+    @GetMapping()
+    public ResponseEntity<UserDto> getInfo(
 
-        UserDto userDto = service.getInfo(principal.getUsername());
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+        UserDto userDto = service.getInfo(principal.getId());
+
         return ResponseEntity.ok(userDto);
     }
 
