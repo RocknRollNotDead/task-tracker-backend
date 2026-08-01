@@ -29,7 +29,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleGeneric(BadCredentialsException e) {
 
-        return buildResponse(HttpStatus.UNAUTHORIZED, "Not right login or password!");
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Not right login or password! ");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

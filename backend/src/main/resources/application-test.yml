@@ -1,8 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/cloud_db
-  minio:
-    endpoint: http://localhost:9010
+    url: jdbc:postgresql://localhost:5432/task_db
   data:
     redis:
       host: localhost

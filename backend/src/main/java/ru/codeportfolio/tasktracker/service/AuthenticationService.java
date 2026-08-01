@@ -3,6 +3,7 @@ package ru.codeportfolio.tasktracker.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,8 +13,10 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 
+@Slf4j
 @Service
 public class AuthenticationService {
 
@@ -25,12 +28,14 @@ public class AuthenticationService {
 
 
     public CustomUserDetails auth(HttpServletRequest httpRequest, HttpServletResponse response, RequestAuthDto req) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        req.username(),
+                        req.email(),
                         req.password()
                 )
         );
+
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

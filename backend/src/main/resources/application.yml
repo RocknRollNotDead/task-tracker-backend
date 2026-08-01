@@ -4,6 +4,7 @@ server:
     session:
       cookie:
         max-age: 7d
+    context-path: /api
 spring:
   application:
     name:
@@ -12,6 +13,7 @@ spring:
     timeout: 7d
 
   servlet:
+
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
@@ -24,12 +26,11 @@ spring:
     hikari:
       minimum-idle: 1
   jpa:
-    show_sql: false
+    show_sql: true
     hibernate:
       ddl-auto: validate
   flyway:
     enabled: true
-    locations: classpath:db/migration
 
 
   data:
