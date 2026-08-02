@@ -3,6 +3,7 @@ package ru.codeportfolio.tasktracker.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -42,7 +43,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<UserDto> getInfo(
 
-            @AuthenticationPrincipal CustomUserDetails principal) throws AuthenticationException {
+            @NotNull @AuthenticationPrincipal CustomUserDetails principal) throws AuthenticationException {
 
         UserDto userDto = service.getInfo(principal.getId());
 

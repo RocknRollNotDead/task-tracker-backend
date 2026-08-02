@@ -55,7 +55,6 @@ public class TaskService {
     }
 
 
-
     public TaskDto edit(Long userId, Long taskId, RequestTaskDto dto) {
         Task task = getUserTask(userId, taskId);
         task.setName(dto.name());
@@ -66,8 +65,8 @@ public class TaskService {
 
     private @NonNull Task getUserTask(Long userId, Long taskId) {
         Task task = taskRepository.getTaskById(taskId);
-        if(!task.getOwner().getId().equals(userId)){
-            throw new UncorrectRequestException("This task is not your!");
+        if (task == null || !task.getOwner().getId().equals(userId)) {
+            throw new NotFoundException("Not found in your task!");
         }
         return task;
     }

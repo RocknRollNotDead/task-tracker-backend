@@ -5,7 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = @UniqueConstraint(name = "uk_users_email", columnNames = "email")
+)
 
 public class User {
     @Id
@@ -29,6 +32,14 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public User(Long id, String username, String password, Role role, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.id = id;
     }
 
     public User() {

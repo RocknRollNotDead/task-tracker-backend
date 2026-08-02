@@ -15,6 +15,8 @@ import ru.codeportfolio.tasktracker.dto.UserDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
 
+import javax.naming.AuthenticationException;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -30,10 +32,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserDto> logIn(HttpServletRequest httpRequest,
                                          HttpServletResponse response,
-                                         @Valid @RequestBody RequestAuthDto req) {
+                                         @Valid @RequestBody RequestAuthDto req) throws AuthenticationException {
 
         CustomUserDetails principal = authenticationService.auth(httpRequest, response, req);
 
+        if (principal == null){
+            throw new AuthenticationException();
+        }
         UserDto userDto = new UserDto(
                 principal.getId(),
                 principal.getUsername(),

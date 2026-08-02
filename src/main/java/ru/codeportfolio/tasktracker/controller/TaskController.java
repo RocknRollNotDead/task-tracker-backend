@@ -32,19 +32,20 @@ public class TaskController {
             throw new ValidationException("Bad request - no body");
         }
 
-        TaskDto taskDto = service.create(principal.getId(), request); // email +
+        TaskDto taskDto = service.create(principal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskDto);
     }
 
     @GetMapping()
-    public ResponseEntity<List<TaskDto>> getTasks(@AuthenticationPrincipal CustomUserDetails principal) { // тот обьект который в SecurityConfig
+    public ResponseEntity<List<TaskDto>> getTasks(@AuthenticationPrincipal CustomUserDetails principal) {
 
         List<TaskDto> result = service.get(principal.getId());
         return ResponseEntity.ok(result);
     }
 
     @PatchMapping()
-    public ResponseEntity<TaskDto> executeTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId){
+    public ResponseEntity<TaskDto> executeTask(@AuthenticationPrincipal CustomUserDetails principal,
+                                               @RequestParam Long taskId){
         TaskDto dto = service.patch(principal.getId(), taskId);
         return ResponseEntity.ok(dto);
     }
@@ -52,7 +53,7 @@ public class TaskController {
     @PatchMapping("/edit")
     public ResponseEntity<TaskDto> editTask(@AuthenticationPrincipal CustomUserDetails principal,
                                             @RequestParam Long taskId,
-                                            @RequestBody RequestTaskDto dto){
+                                            @Valid @RequestBody RequestTaskDto dto){
         TaskDto taskDto = service.edit(principal.getId(), taskId, dto);
         return ResponseEntity.ok(taskDto);
     }
