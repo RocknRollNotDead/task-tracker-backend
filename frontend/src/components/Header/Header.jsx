@@ -16,8 +16,7 @@ export default function Header({ onOpenLogin, onOpenRegister }) {
           <span className="app-header__avatar" aria-hidden="true">
             {(user.username || user.email)?.[0]?.toUpperCase() || "?"}
           </span>
-          {/* user.username появится только после того, как UserDto на бэкенде
-              будет расширен полем username (см. комментарий в authApi.js) */}
+          {}
           <span className="app-header__email">{user.username || user.email}</span>
           <button type="button" className="btn btn-ghost btn-sm" onClick={logout}>
             Выйти
