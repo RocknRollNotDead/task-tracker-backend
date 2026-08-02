@@ -34,14 +34,12 @@ public class UsersDbInitializer implements CommandLineRunner {
                     )
             );
         }
-        String email = System.getenv("EMAIL_USER");
-        if (userRepository.findUsersByEmail(email).isEmpty()) {
-            System.out.println(email);
+        if (userRepository.findUsersByEmail("2@a.ru").isEmpty()) {
             userRepository.save(new User(
                             "User",
                             passwordEncoder.encode(System.getenv("PASSWORD_USER")),
                             Role.USER,
-                            email
+                            "2@a.ru"
                     )
             );
         }
