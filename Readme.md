@@ -21,7 +21,7 @@
 
 **Email Sender**
 
-- Помощник бэкенду, RPC API на Spring Boot со Spring Mail
+- Помощник бэкенду, RPC API на Spring Boot со Spring Mail, находится в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-email-sender)
 
 **Планировщик**
 
@@ -31,7 +31,7 @@
 
 - Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API, скорее всего это будет либо Claude, либо бесплатный Grok
 
-Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka
+Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории.
 
 
 ## Функциональность
