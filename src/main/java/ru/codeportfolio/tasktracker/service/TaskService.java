@@ -13,6 +13,7 @@ import ru.codeportfolio.tasktracker.model.Task;
 import ru.codeportfolio.tasktracker.model.User;
 import ru.codeportfolio.tasktracker.util.TaskMapper;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -39,6 +40,7 @@ public class TaskService {
 
     public List<TaskDto> get(Long userId) {
         List<Task> tasks = taskRepository.getTasksByOwner_Id(userId);
+        tasks.sort(Comparator.comparing(Task::getTimestamp));
         return TaskMapper.MapList(tasks);
     }
 

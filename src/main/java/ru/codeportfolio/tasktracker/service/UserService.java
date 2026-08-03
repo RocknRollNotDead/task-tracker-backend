@@ -44,10 +44,6 @@ public class UserService {
         } catch (DataIntegrityViolationException e) {
             throwSaveException(dto, e);
         }
-//
-//        if (user == null) {
-//            throw new AlreadyExistException("Email %s already exist!".formatted(dto.email()));
-//        }
 
         // делегирование
         emailSenderService.sendWelcomeEmail(dto.email());
