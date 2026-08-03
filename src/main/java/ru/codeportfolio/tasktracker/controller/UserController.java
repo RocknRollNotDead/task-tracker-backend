@@ -30,12 +30,14 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<UserDto> createUser(HttpServletRequest httpRequest,
-                                              HttpServletResponse response,
+    public ResponseEntity<UserDto> createUser(
                                               @Valid @RequestBody RequestRegistrationDto req) {
 
         UserDto userDto = service.createUser(req);
-        authenticationService.auth(httpRequest, response, new RequestAuthDto(req.email(), req.password()));
+
+        authenticationService.auth(
+                new RequestAuthDto(req.email(), req.password()));
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
@@ -43,7 +45,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<UserDto> getInfo(
 
-            @NotNull @AuthenticationPrincipal CustomUserDetails principal) throws AuthenticationException {
+            @NotNull @AuthenticationPrincipal CustomUserDetails principal) {
 
         UserDto userDto = service.getInfo(principal.getId());
 

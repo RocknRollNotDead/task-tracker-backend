@@ -1,102 +1,117 @@
 package ru.codeportfolio.tasktracker.service;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
+import ru.codeportfolio.tasktracker.dto.jwt.JwtClaimsDto;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
+@Component
 public class JwtService {
 
-    @Value("${secret-key}") // todo
+    @Value("${secret-key}")
     private String secretKey;
 
-    private JwtAuthenticationDto generateAuthToken(String email){
-        JwtAuthenticationDto jwtDto = new JwtAuthenticationDto(
-                generateJwtToken(email),
-                generateRefreshToken(email)
-        );
-        return jwtDto;
-    }
 
 
-    private JwtAuthenticationDto refreshToken(String email, String refreshToken){
+
+
+    public JwtAuthenticationDto generateAuthToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto(
-                generateJwtToken(email),
-                refreshToken
+                generateJwtToken(email, authorities, id)
         );
         return jwtDto;
     }
 
 
     public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser()
+        Claims claims = getClaims(token);
+        return claims.getSubject();
+    }
+
+    public Long getIdFromToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("id", Long.class);
+    }
+
+    public Collection<? extends GrantedAuthority> getRoleFromToken(String token) {
+        Claims claims = getClaims(token);
+        List<String> roles = claims.get("authorities", List.class);
+        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+    }
+
+    public JwtClaimsDto getJwtClaimsDtoFromToken(String token){
+        Claims claims = getClaims(token);
+        List<String> roles = claims.get("authorities", List.class);
+        return new JwtClaimsDto(
+                claims.get("id", Long.class),
+                claims.getSubject(),
+                roles.stream().map(SimpleGrantedAuthority::new).toList()
+        );
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            getClaims(token);
+            return !isTokenExpired(token);
+        } catch (JwtException e) {
+            log.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+    }
+
+
+    private boolean isTokenExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
+    }
+    
+    private Claims getClaims(String token) {
+        return Jwts.parser()
                 .verifyWith(getSignInKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        return claims.getSubject();
     }
 
+    private String generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
+        Date date = getDateExpireToken();
 
-    public boolean validateJwtToken(String token){
-        try {
-
-            Jwts.parser()
-                    .verifyWith(getSignInKey())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-            return true;
-        } catch (ExpiredJwtException e){
-            log.error("Expired Jwt exception", e);
-        } catch (UnsupportedJwtException e){
-            log.error("Unsupported Jwt exception", e);
-        } catch (MalformedJwtException e){
-            log.error("Malformed Jwt exception", e);
-
-        } catch (SecurityException e) {
-            log.error("Security exception", e);
-        } catch (Exception e) {
-            log.error("Unknown exception", e);
-        }
-
-        return false;
-    }
-
-
-
-    private String generateJwtToken(String email){
-        Date date = Date.from(LocalDateTime.now().plusHours(8).atZone(ZoneId.systemDefault()).toInstant());
+        List<String> roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
         return Jwts.builder()
                 .subject(email)
+                .claim("authorities", roles)
+                .claim("id", id)
                 .expiration(date)
                 .signWith(getSignInKey())
                 .compact();
     }
 
-    private String generateRefreshToken(String email){
-        Date date = Date.from(LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toInstant());
-
-        return Jwts.builder()
-                .subject(email)
-                .expiration(date)
-                .signWith(getSignInKey())
-                .compact();
+    private static @NonNull Date getDateExpireToken() {
+        return Date.from(LocalDateTime.now().plusHours(16).atZone(ZoneId.systemDefault()).toInstant());
     }
 
 
     private SecretKey getSignInKey() {
-        byte [] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

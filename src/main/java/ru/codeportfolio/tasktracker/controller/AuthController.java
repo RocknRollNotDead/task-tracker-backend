@@ -1,21 +1,16 @@
 package ru.codeportfolio.tasktracker.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
-import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
-import ru.codeportfolio.tasktracker.dto.UserDto;
+import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
-
-import javax.naming.AuthenticationException;
+import ru.codeportfolio.tasktracker.service.JwtService;
 
 
 @RestController
@@ -23,29 +18,26 @@ import javax.naming.AuthenticationException;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthenticationService authenticationService) {
+    public AuthController(AuthenticationService authenticationService, JwtService jwtService) {
         this.authenticationService = authenticationService;
+        this.jwtService = jwtService;
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> logIn(HttpServletRequest httpRequest,
-                                         HttpServletResponse response,
-                                         @Valid @RequestBody RequestAuthDto req) throws AuthenticationException {
+    public ResponseEntity<JwtAuthenticationDto> logIn(@Valid @RequestBody RequestAuthDto req) {
 
-        CustomUserDetails principal = authenticationService.auth(httpRequest, response, req);
+        CustomUserDetails principal = authenticationService.auth(req);
 
-        if (principal == null){
-            throw new AuthenticationException();
-        }
-        UserDto userDto = new UserDto(
-                principal.getId(),
-                principal.getUsername(),
-                principal.getEmail()
+        JwtAuthenticationDto jwtDto = jwtService.generateAuthToken(
+                principal.getEmail(),
+                principal.getAuthorities(),
+                principal.getId()
         );
 
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(jwtDto);
 
 
     }

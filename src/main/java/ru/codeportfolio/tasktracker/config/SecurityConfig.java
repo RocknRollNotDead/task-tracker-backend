@@ -1,26 +1,21 @@
 package ru.codeportfolio.tasktracker.config;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.model.CustomUserDetails;
-import ru.codeportfolio.tasktracker.model.User;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
@@ -32,12 +27,11 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
-    private final CustomUserDetailsService customUserDetailsService;
-    private JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
 
-    public SecurityConfig(ObjectMapper objectMapper, CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(ObjectMapper objectMapper, JwtFilter jwtFilter) {
         this.objectMapper = objectMapper;
-        this.customUserDetailsService = customUserDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -45,11 +39,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/auth/**"
-                                ).permitAll()
+                        .requestMatchers("/auth/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user").authenticated()
-                                .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -67,16 +61,16 @@ public class SecurityConfig {
                         })
                 )
                 .logout(logout -> logout
-                                .logoutUrl("/auth/sign-out")
-                                .logoutSuccessHandler((
-                                        request, response, authentication) -> {
-                                    if (authentication == null) {
-                                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                    } else {
-                                        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                                    }
+                        .logoutUrl("/auth/sign-out")
+                        .logoutSuccessHandler((
+                                request, response, authentication) -> {
+                            if (authentication == null) {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            } else {
+                                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                            }
 
-                                })
+                        })
                 );
 
         return http.build();
@@ -87,9 +81,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        return customUserDetailsService;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     private Map<String, String> buildResponse(String message) {

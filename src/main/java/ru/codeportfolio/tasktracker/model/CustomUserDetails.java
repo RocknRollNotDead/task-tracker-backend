@@ -3,6 +3,7 @@ package ru.codeportfolio.tasktracker.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.codeportfolio.tasktracker.dto.jwt.JwtClaimsDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,14 @@ public class CustomUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.authorities = List.of(new SimpleGrantedAuthority(user.getRole().getAuthority()));
+    }
+
+    public CustomUserDetails(JwtClaimsDto dto){
+        this.id = dto.id();
+        this.email = dto.email();
+        this.authorities = dto.authorities();
+        username = null;
+        password = null;
     }
 
     public Long getId() {

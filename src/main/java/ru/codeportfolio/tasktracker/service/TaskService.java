@@ -8,7 +8,6 @@ import ru.codeportfolio.tasktracker.dao.UserRepository;
 import ru.codeportfolio.tasktracker.dto.RequestTaskDto;
 import ru.codeportfolio.tasktracker.dto.TaskDto;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
-import ru.codeportfolio.tasktracker.exception.entity.UncorrectRequestException;
 import ru.codeportfolio.tasktracker.model.Task;
 import ru.codeportfolio.tasktracker.model.User;
 import ru.codeportfolio.tasktracker.util.TaskMapper;

@@ -3,7 +3,6 @@ package ru.codeportfolio.tasktracker.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import ru.codeportfolio.tasktracker.config.TrimStringDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 

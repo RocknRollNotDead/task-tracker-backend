@@ -1,16 +1,11 @@
 server:
   port: 8080
   servlet:
-    session:
-      cookie:
-        max-age: 7d
     context-path: /api
 spring:
   application:
     name:
       task-tracker
-  session:
-    timeout: 7d
 
   servlet:
 
@@ -31,12 +26,6 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
-
-
-  data:
-    redis:
-      host: ${LOCALHOST:redis}
-      port: 6379
 
 secret-key:
   ${SECRET_KEY_JWT}

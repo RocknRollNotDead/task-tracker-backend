@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
 import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.dto.UserDto;
-import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
-import ru.codeportfolio.tasktracker.dto.jwt.RefreshTokenDto;
 import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
 import ru.codeportfolio.tasktracker.model.Role;
@@ -30,12 +28,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
     }
-
-
-    public JwtAuthenticationDto refreshToken(RefreshTokenDto refreshTokenDto){
-
-    }
-
 
 
     public UserDto createUser(RequestRegistrationDto dto) {

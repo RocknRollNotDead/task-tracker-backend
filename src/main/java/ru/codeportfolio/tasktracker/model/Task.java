@@ -3,7 +3,6 @@ package ru.codeportfolio.tasktracker.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -46,8 +45,8 @@ public class Task {
 
     }
 
-    public void setStatus(){
-        if (status == Status.DONE){
+    public void setStatus() {
+        if (status == Status.DONE) {
 //            throw new AlreadyExistException("This status %s already exist".formatted(Status.DONE));
             // я ввобще хотел сделать так ^, но увидел, что в тз необходим обратный разворот
             status = Status.IN_PROGRESS;

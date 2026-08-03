@@ -45,7 +45,7 @@ public class TaskController {
 
     @PatchMapping()
     public ResponseEntity<TaskDto> executeTask(@AuthenticationPrincipal CustomUserDetails principal,
-                                               @RequestParam Long taskId){
+                                               @RequestParam Long taskId) {
         TaskDto dto = service.patch(principal.getId(), taskId);
         return ResponseEntity.ok(dto);
     }
@@ -53,17 +53,16 @@ public class TaskController {
     @PatchMapping("/edit")
     public ResponseEntity<TaskDto> editTask(@AuthenticationPrincipal CustomUserDetails principal,
                                             @RequestParam Long taskId,
-                                            @Valid @RequestBody RequestTaskDto dto){
+                                            @Valid @RequestBody RequestTaskDto dto) {
         TaskDto taskDto = service.edit(principal.getId(), taskId, dto);
         return ResponseEntity.ok(taskDto);
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> deleteTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId){
+    public ResponseEntity<Void> deleteTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId) {
         service.delete(principal.getId(), taskId);
         return ResponseEntity.noContent().build();
     }
-
 
 
 }

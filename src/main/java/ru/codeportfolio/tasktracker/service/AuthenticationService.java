@@ -1,19 +1,12 @@
 package ru.codeportfolio.tasktracker.service;
 
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
-import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 
 @Slf4j
@@ -22,12 +15,13 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+
     public AuthenticationService(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
 
-    public CustomUserDetails auth(HttpServletRequest httpRequest, HttpServletResponse response, RequestAuthDto req) {
+    public CustomUserDetails auth(RequestAuthDto req) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -35,15 +29,6 @@ public class AuthenticationService {
                         req.password()
                 )
         );
-
-
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-
-        SecurityContextRepository repository = new HttpSessionSecurityContextRepository();
-        repository.saveContext(context, httpRequest, response);
-
         return (CustomUserDetails) authentication.getPrincipal();
     }
 

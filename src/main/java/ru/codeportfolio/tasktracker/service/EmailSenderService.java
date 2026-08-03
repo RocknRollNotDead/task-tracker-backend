@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class EmailSenderService {
 
 
-    public void sendWelcomeEmail(String email){
+    public void sendWelcomeEmail(String email) {
         // точка входа в кафку
     }
 }
