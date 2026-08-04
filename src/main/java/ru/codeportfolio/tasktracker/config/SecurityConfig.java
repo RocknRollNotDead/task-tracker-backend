@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -60,18 +59,8 @@ public class SecurityConfig {
                                             )));
                         })
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/auth/sign-out")
-                        .logoutSuccessHandler((
-                                request, response, authentication) -> {
-                            if (authentication == null) {
-                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            } else {
-                                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                            }
 
-                        })
-                );
+        ;
 
         return http.build();
     }

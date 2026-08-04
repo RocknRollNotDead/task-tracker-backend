@@ -1,16 +1,12 @@
-package ru.codeportfolio.tasktracker.dto;
+package ru.codeportfolio.tasktracker.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import ru.codeportfolio.tasktracker.config.TrimStringDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
-public record RequestRegistrationDto(
-        @NotBlank(message = "Username can't be empty!")
-        @JsonDeserialize(using = TrimStringDeserializer.class)
-        String username,
+public record RequestAuthDto(
 
         @NotBlank(message = "Email cant be empty!")
         @Email(message = "Invalid email!")
@@ -18,11 +14,10 @@ public record RequestRegistrationDto(
         String email,
 
         @NotBlank(message = "Password can't be empty!")
-        @Size(min = RequestRegistrationDto.PASSWORD_MIN_LENGTH,
-                message = "Password must be at least {min} characters")
         @Pattern(regexp = "^\\S+$", message = "Password can't contain whitespace")
         String password
 
 ) {
-    private static final int PASSWORD_MIN_LENGTH = 5;
+
 }
+

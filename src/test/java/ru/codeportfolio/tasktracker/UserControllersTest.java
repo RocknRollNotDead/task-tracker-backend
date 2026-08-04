@@ -60,7 +60,7 @@ class UserControllersTest extends IntegrationTestBase {
 
     }
 
-    void createTestUser() {
+    private void createTestUser() {
         User user = userRepository.findUsersByEmail(EMAIL_TEST_USER)
                 .orElseGet(() -> userRepository.save(new User(
                         USERNAME_TEST_USER,
@@ -137,7 +137,7 @@ class UserControllersTest extends IntegrationTestBase {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value(USERNAME_TEST_USER));
+                .andExpect(jsonPath("$.token").exists());
     }
 
     @Test

@@ -31,30 +31,14 @@ public class JwtService {
 
 
 
-
-    public JwtAuthenticationDto generateAuthToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
+    public JwtAuthenticationDto generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto(
-                generateJwtToken(email, authorities, id)
+                generateAuthToken(email, authorities, id)
         );
         return jwtDto;
     }
 
 
-    public String getEmailFromToken(String token) {
-        Claims claims = getClaims(token);
-        return claims.getSubject();
-    }
-
-    public Long getIdFromToken(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("id", Long.class);
-    }
-
-    public Collection<? extends GrantedAuthority> getRoleFromToken(String token) {
-        Claims claims = getClaims(token);
-        List<String> roles = claims.get("authorities", List.class);
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
-    }
 
     public JwtClaimsDto getJwtClaimsDtoFromToken(String token){
         Claims claims = getClaims(token);
@@ -77,6 +61,7 @@ public class JwtService {
     }
 
 
+
     private boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
     }
@@ -89,8 +74,8 @@ public class JwtService {
                 .getPayload();
     }
 
-    private String generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
-        Date date = getDateExpireToken();
+    private String generateAuthToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
+        Date date = getDateExpireToken(16);
 
         List<String> roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -105,8 +90,17 @@ public class JwtService {
                 .compact();
     }
 
-    private static @NonNull Date getDateExpireToken() {
-        return Date.from(LocalDateTime.now().plusHours(16).atZone(ZoneId.systemDefault()).toInstant());
+    private String generateRefreshToken() {
+        Date date = getDateExpireToken(16 * 60);
+
+        return Jwts.builder()
+                .expiration(date)
+                .signWith(getSignInKey())
+                .compact();
+    }
+
+    private static @NonNull Date getDateExpireToken(int hours) {
+        return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
     }
 
 

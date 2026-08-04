@@ -1,12 +1,16 @@
 package ru.codeportfolio.tasktracker.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.request.RequestAuthDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
@@ -31,15 +35,23 @@ public class AuthController {
 
         CustomUserDetails principal = authenticationService.auth(req);
 
-        JwtAuthenticationDto jwtDto = jwtService.generateAuthToken(
+        JwtAuthenticationDto jwtDto = jwtService.generateJwtToken(
                 principal.getEmail(),
                 principal.getAuthorities(),
                 principal.getId()
         );
 
         return ResponseEntity.ok(jwtDto);
+    }
 
-
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logOut(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+        if (principal == null){
+            throw new BadCredentialsException("Impossible logout because you not authorized.");
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
 

@@ -1,19 +1,18 @@
 package ru.codeportfolio.tasktracker.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
-import ru.codeportfolio.tasktracker.dto.RequestRegistrationDto;
-import ru.codeportfolio.tasktracker.dto.UserDto;
+import ru.codeportfolio.tasktracker.dto.request.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.request.RequestRegistrationDto;
+import ru.codeportfolio.tasktracker.dto.response.UserDto;
+import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
+import ru.codeportfolio.tasktracker.service.JwtService;
 import ru.codeportfolio.tasktracker.service.UserService;
 
 
@@ -23,22 +22,30 @@ public class UserController {
 
     private final UserService service;
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
-    public UserController(UserService service, AuthenticationService authenticationService) {
+    public UserController(UserService service, AuthenticationService authenticationService, JwtService jwtService) {
         this.service = service;
         this.authenticationService = authenticationService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping()
-    public ResponseEntity<UserDto> createUser(
+    public ResponseEntity<JwtAuthenticationDto> createUser(
                                               @Valid @RequestBody RequestRegistrationDto req) {
 
         UserDto userDto = service.createUser(req);
 
-        authenticationService.auth(
+        CustomUserDetails principal = authenticationService.auth(
                 new RequestAuthDto(req.email(), req.password()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        JwtAuthenticationDto jwtDto = jwtService.generateJwtToken(
+                principal.getEmail(),
+                principal.getAuthorities(),
+                principal.getId()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(jwtDto);
     }
 
 

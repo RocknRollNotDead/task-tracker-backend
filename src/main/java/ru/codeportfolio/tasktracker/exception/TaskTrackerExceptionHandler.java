@@ -34,7 +34,8 @@ public class TaskTrackerExceptionHandler {
 
         return buildResponse(HttpStatus.BAD_REQUEST,
                 "Not right %s! %s = %s".formatted(
-                        e.getName(), e.getName(),
+                        e.getName(),
+                        e.getName(),
                         e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "unknown"
                 ));
     }
@@ -62,17 +63,6 @@ public class TaskTrackerExceptionHandler {
                 .orElse("Validation error");
 
         return buildResponse(HttpStatus.BAD_REQUEST, message);
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Map<String, String>> handleAuth(AuthenticationException e) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, "User not authorized!");
-
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleGeneric(AccessDeniedException e) {
-        return buildResponse(HttpStatus.FORBIDDEN, "Access denied!!!");
     }
 
     @ExceptionHandler(NotFoundException.class)

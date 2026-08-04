@@ -1,9 +1,6 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/task_db
-  data:
-    redis:
-      host: localhost
   jpa:
     hibernate:
       ddl-auto: update

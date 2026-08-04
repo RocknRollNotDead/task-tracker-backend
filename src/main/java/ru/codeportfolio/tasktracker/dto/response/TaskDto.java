@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.dto;
+package ru.codeportfolio.tasktracker.dto.response;
 
 import ru.codeportfolio.tasktracker.model.Status;
 

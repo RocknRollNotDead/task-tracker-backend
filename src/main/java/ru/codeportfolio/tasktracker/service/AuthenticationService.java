@@ -6,7 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.codeportfolio.tasktracker.dto.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.request.RequestAuthDto;
 import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 
 @Slf4j
