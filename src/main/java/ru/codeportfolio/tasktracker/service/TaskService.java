@@ -15,6 +15,7 @@ import ru.codeportfolio.tasktracker.util.TaskMapper;
 import java.util.Comparator;
 import java.util.List;
 
+@Transactional
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
@@ -43,7 +44,7 @@ public class TaskService {
         return TaskMapper.MapList(tasks);
     }
 
-    @Transactional
+
     public TaskDto patch(Long userId, Long taskId) {
         Task task = getUserTask(userId, taskId);
         task.setStatus();

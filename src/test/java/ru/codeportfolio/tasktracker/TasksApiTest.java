@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Testcontainers
 class TasksApiTest extends IntegrationTestBase {
 
     public static final String API_TASKS = "/tasks";
@@ -37,7 +36,8 @@ class TasksApiTest extends IntegrationTestBase {
     public static final String TEST_TASK_NAME = "Test task";
     public static final String TEST_TASK_TEXT = "Test task text";
     private UsernamePasswordAuthenticationToken token;
-    public static final String REQUEST_BODY_JSON = """
+    public static final String REQUEST_BODY_JSON =
+            """
             {
                 "name": "%s",
                 "text": "%s"

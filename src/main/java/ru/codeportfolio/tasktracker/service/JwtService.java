@@ -90,15 +90,6 @@ public class JwtService {
                 .compact();
     }
 
-    private String generateRefreshToken() {
-        Date date = getDateExpireToken(16 * 60);
-
-        return Jwts.builder()
-                .expiration(date)
-                .signWith(getSignInKey())
-                .compact();
-    }
-
     private static @NonNull Date getDateExpireToken(int hours) {
         return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
     }
