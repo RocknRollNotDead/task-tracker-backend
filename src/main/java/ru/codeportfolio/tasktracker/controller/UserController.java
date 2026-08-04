@@ -45,7 +45,7 @@ public class UserController {
                 principal.getId()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(jwtDto);
+        return ResponseEntity.ok(jwtDto);
     }
 
 
