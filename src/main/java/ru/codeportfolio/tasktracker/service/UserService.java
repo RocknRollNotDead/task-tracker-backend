@@ -46,7 +46,7 @@ public class UserService {
         }
 
         // делегирование
-        emailSenderService.sendWelcomeEmail(dto.email());
+        emailSenderService.sendWelcomeEmail(dto.email(), dto.username());
 
         return UserMapper.execute(user);
     }
