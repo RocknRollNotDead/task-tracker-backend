@@ -25,12 +25,14 @@
 
 **Планировщик**
 
-- Помощник бэкенду, RPC API на Spring Boot со Spring Scheduler
+- Помощник бэкенду, RPC API на Spring Boot со Spring Scheduler, находится
+  в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-scheduler)
 
 **Сервис суммаризации**
 
 - Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API, скорее всего это будет либо Claude, либо бесплатный
-  Grok
+  Grok, находится
+  в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
 
 Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории.
 
