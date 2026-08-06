@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.config;
+package ru.codeportfolio.tasktracker.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.model.CustomUserDetails;
 import ru.codeportfolio.tasktracker.model.User;
 
 @Component

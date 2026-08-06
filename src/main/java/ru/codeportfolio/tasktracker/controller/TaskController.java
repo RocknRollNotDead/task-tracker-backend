@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.codeportfolio.tasktracker.dto.request.RequestTaskDto;
-import ru.codeportfolio.tasktracker.dto.response.TaskDto;
+import ru.codeportfolio.tasktracker.dto.http.request.RequestTaskDto;
+import ru.codeportfolio.tasktracker.dto.http.response.TaskDto;
 import ru.codeportfolio.tasktracker.exception.entity.ValidationException;
-import ru.codeportfolio.tasktracker.model.CustomUserDetails;
+import ru.codeportfolio.tasktracker.security.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.TaskService;
 
 import java.util.List;

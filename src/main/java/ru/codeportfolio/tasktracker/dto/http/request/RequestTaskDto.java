@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.dto.request;
+package ru.codeportfolio.tasktracker.dto.http.request;
 
 import jakarta.validation.constraints.NotBlank;
 

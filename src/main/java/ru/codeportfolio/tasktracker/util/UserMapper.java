@@ -1,6 +1,6 @@
 package ru.codeportfolio.tasktracker.util;
 
-import ru.codeportfolio.tasktracker.dto.response.UserDto;
+import ru.codeportfolio.tasktracker.dto.http.response.UserDto;
 import ru.codeportfolio.tasktracker.model.User;
 
 public final class UserMapper {

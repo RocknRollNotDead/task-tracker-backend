@@ -1,9 +1,10 @@
-package ru.codeportfolio.tasktracker.model;
+package ru.codeportfolio.tasktracker.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtClaimsDto;
+import ru.codeportfolio.tasktracker.model.User;
 
 import java.util.Collection;
 import java.util.List;

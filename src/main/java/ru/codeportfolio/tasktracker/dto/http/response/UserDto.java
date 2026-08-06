@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.dto.response;
+package ru.codeportfolio.tasktracker.dto.http.response;
 
 public record UserDto(
         Long id,

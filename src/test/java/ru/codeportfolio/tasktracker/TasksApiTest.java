@@ -12,10 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.codeportfolio.tasktracker.dao.TaskRepository;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
 import ru.codeportfolio.tasktracker.model.*;
+import ru.codeportfolio.tasktracker.security.CustomUserDetails;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package ru.codeportfolio.tasktracker.util;
 
-import ru.codeportfolio.tasktracker.dto.response.TaskDto;
+import ru.codeportfolio.tasktracker.dto.http.response.TaskDto;
 import ru.codeportfolio.tasktracker.model.Task;
 
 import java.util.List;

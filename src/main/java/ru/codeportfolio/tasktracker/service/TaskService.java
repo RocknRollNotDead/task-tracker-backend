@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.codeportfolio.tasktracker.dao.TaskRepository;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.dto.request.RequestTaskDto;
-import ru.codeportfolio.tasktracker.dto.response.TaskDto;
+import ru.codeportfolio.tasktracker.dto.http.request.RequestTaskDto;
+import ru.codeportfolio.tasktracker.dto.http.response.TaskDto;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
 import ru.codeportfolio.tasktracker.model.Task;
 import ru.codeportfolio.tasktracker.model.User;
@@ -40,7 +40,9 @@ public class TaskService {
 
     public List<TaskDto> get(Long userId) {
         List<Task> tasks = taskRepository.getTasksByOwner_Id(userId);
-        tasks.sort(Comparator.comparing(Task::getTimestamp));
+        tasks.sort(Comparator.comparing(
+                Task::getTimestamp,
+                Comparator.nullsLast(Comparator.reverseOrder())));
         return TaskMapper.MapList(tasks);
     }
 

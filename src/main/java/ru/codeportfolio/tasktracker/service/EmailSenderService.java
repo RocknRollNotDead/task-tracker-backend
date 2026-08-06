@@ -2,7 +2,7 @@ package ru.codeportfolio.tasktracker.service;
 
 import org.springframework.stereotype.Service;
 import ru.codeportfolio.tasktracker.dto.EmailDto;
-import tools.jackson.databind.ObjectMapper;
+import ru.codeportfolio.tasktracker.service.kafka.EmailKafkaSender;
 
 @Service
 public class EmailSenderService {
@@ -18,12 +18,10 @@ public class EmailSenderService {
     public final static String DOMAIN = "codeportfolio.ru";
     private final static String HEADER = "Приветственное письмо от Task Ledger";
 
-    private final EmailKafkaTemplate emailKafkaTemplate;
-    private final ObjectMapper objectMapper;
+    private final EmailKafkaSender emailKafkaSender;
 
-    public EmailSenderService(EmailKafkaTemplate emailKafkaTemplate, ObjectMapper objectMapper) {
-        this.emailKafkaTemplate = emailKafkaTemplate;
-        this.objectMapper = objectMapper;
+    public EmailSenderService(EmailKafkaSender emailKafkaSender) {
+        this.emailKafkaSender = emailKafkaSender;
     }
 
 
@@ -34,8 +32,8 @@ public class EmailSenderService {
                 HEADER,
                 TEXT_WELCOME_MAIL_MUST_BE_FORMATTED.formatted(username, DOMAIN)
         );
-        String json = objectMapper.writeValueAsString(emailDto);
-        emailKafkaTemplate.sendOrder(json);
+
+        emailKafkaSender.executeSend(emailDto);
 
     }
 }

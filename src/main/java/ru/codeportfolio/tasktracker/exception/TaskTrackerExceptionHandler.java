@@ -3,9 +3,7 @@ package ru.codeportfolio.tasktracker.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,7 +12,6 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
-import ru.codeportfolio.tasktracker.exception.entity.OutOfMemoryException;
 import ru.codeportfolio.tasktracker.exception.entity.ValidationException;
 
 import java.util.Map;
@@ -73,11 +70,6 @@ public class TaskTrackerExceptionHandler {
     @ExceptionHandler(AlreadyExistException.class)
     public ResponseEntity<Map<String, String>> handleGeneric(AlreadyExistException e) {
         return buildResponse(HttpStatus.CONFLICT, e.getMessage());
-    }
-
-    @ExceptionHandler(OutOfMemoryException.class)
-    public ResponseEntity<Map<String, String>> handleGeneric(OutOfMemoryException e) {
-        return buildResponse(HttpStatus.INSUFFICIENT_STORAGE, e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)

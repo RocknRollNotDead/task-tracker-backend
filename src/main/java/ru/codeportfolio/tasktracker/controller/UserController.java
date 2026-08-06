@@ -2,17 +2,16 @@ package ru.codeportfolio.tasktracker.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.codeportfolio.tasktracker.dto.request.RequestAuthDto;
-import ru.codeportfolio.tasktracker.dto.request.RequestRegistrationDto;
-import ru.codeportfolio.tasktracker.dto.response.UserDto;
+import ru.codeportfolio.tasktracker.dto.http.request.RequestAuthDto;
+import ru.codeportfolio.tasktracker.dto.http.request.RequestRegistrationDto;
+import ru.codeportfolio.tasktracker.dto.http.response.UserDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
-import ru.codeportfolio.tasktracker.model.CustomUserDetails;
+import ru.codeportfolio.tasktracker.security.CustomUserDetails;
 import ru.codeportfolio.tasktracker.service.AuthenticationService;
-import ru.codeportfolio.tasktracker.service.JwtService;
+import ru.codeportfolio.tasktracker.security.JwtService;
 import ru.codeportfolio.tasktracker.service.UserService;
 
 

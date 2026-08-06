@@ -1,4 +1,4 @@
-package ru.codeportfolio.tasktracker.service;
+package ru.codeportfolio.tasktracker.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

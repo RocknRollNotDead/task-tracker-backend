@@ -14,10 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.codeportfolio.tasktracker.dao.TaskRepository;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.model.CustomUserDetails;
+import ru.codeportfolio.tasktracker.security.CustomUserDetails;
 import ru.codeportfolio.tasktracker.model.Role;
 import ru.codeportfolio.tasktracker.model.User;
-import ru.codeportfolio.tasktracker.service.JwtService;
+import ru.codeportfolio.tasktracker.security.JwtService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
