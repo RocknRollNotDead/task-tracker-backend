@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.kafka:spring-kafka'
 
-    runtimeOnly 'org.springframework.boot:spring-boot-dev-tools'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 
     implementation 'org.postgresql:postgresql'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'

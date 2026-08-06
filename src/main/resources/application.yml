@@ -24,3 +24,6 @@ spring:
 
 secret-key:
   ${SECRET_KEY_JWT}
+
+kafka:
+  url: ${LOCALHOST:kafka}:9092

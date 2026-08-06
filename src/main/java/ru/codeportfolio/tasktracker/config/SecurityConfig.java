@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;

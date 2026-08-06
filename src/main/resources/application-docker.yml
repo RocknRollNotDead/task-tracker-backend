@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://mydb:5432/task_db
-kafka:
-  url: kafka:9092
