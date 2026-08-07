@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = List.of(new SimpleGrantedAuthority(user.getRole().getAuthority()));
     }
 
-    public CustomUserDetails(JwtClaimsDto dto){
+    public CustomUserDetails(JwtClaimsDto dto) {
         this.id = dto.id();
         this.email = dto.email();
         this.authorities = dto.authorities();

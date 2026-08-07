@@ -45,7 +45,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logOut(
             @AuthenticationPrincipal CustomUserDetails principal) {
-        if (principal == null){
+        if (principal == null) {
             throw new BadCredentialsException("Impossible logout because you not authorized.");
         } else {
             return ResponseEntity.noContent().build();

@@ -15,7 +15,7 @@ public class EmailKafkaSender {
         this.objectMapper = objectMapper;
     }
 
-    public void executeSend(EmailDto emailDto){
+    public void executeSend(EmailDto emailDto) {
         String json = objectMapper.writeValueAsString(emailDto);
         kafkaTemplate.send("EMAIL_SENDING_TASKS", json);
     }

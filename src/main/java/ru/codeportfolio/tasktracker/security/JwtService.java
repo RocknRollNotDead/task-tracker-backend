@@ -29,8 +29,6 @@ public class JwtService {
     private String secretKey;
 
 
-
-
     public JwtAuthenticationDto generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto(
                 generateAuthToken(email, authorities, id)
@@ -39,8 +37,7 @@ public class JwtService {
     }
 
 
-
-    public JwtClaimsDto getJwtClaimsDtoFromToken(String token){
+    public JwtClaimsDto getJwtClaimsDtoFromToken(String token) {
         Claims claims = getClaims(token);
         List<String> roles = claims.get("authorities", List.class);
         return new JwtClaimsDto(
@@ -61,11 +58,10 @@ public class JwtService {
     }
 
 
-
     private boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
     }
-    
+
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSignInKey())

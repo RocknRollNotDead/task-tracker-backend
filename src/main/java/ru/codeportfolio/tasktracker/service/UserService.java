@@ -16,7 +16,7 @@ import ru.codeportfolio.tasktracker.model.User;
 import ru.codeportfolio.tasktracker.util.UserMapper;
 
 
-@Transactional
+
 @Slf4j
 @Service
 public class UserService {
@@ -24,11 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailSenderService emailSenderService;
+    private final UserSaverService userSaverService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService, UserSaverService userSaverService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
+        this.userSaverService = userSaverService;
     }
 
 
@@ -36,25 +38,20 @@ public class UserService {
 
 
         String password = passwordEncoder.encode(dto.password());
-        User user = null;
-        try {
-            user = userRepository.save(new User(
-                    dto.username(),
-                    password,
-                    Role.USER,
-                    dto.email()));
-        } catch (DataIntegrityViolationException e) {
-            throwSaveException(dto, e);
-        }
+        User user = userSaverService.saveUserToRepository(dto, password);
 
-        // делегирование
-        emailSenderService.sendWelcomeEmail(dto.email(), dto.username());
+        try {
+            emailSenderService.sendWelcomeEmail(dto.email(), dto.username());
+        } catch (Exception e) {
+            log.warn("Email send to {} error!", dto.email());
+        }
 
         log.info("Registration user {} with mail {}", dto.username(), dto.email());
 
         return UserMapper.execute(user);
     }
 
+    @Transactional(readOnly = true)
     public UserDto getInfo(Long id) {
 
         User user = userRepository.findById(id).orElseThrow(
@@ -63,23 +60,9 @@ public class UserService {
         return new UserDto(user.getId(), user.getUsername(), user.getEmail());
     }
 
-    private static void throwSaveException(RequestRegistrationDto dto, DataIntegrityViolationException e) {
-        Throwable rootCause = e.getMostSpecificCause();
 
-        if (rootCause instanceof PSQLException psqlEx) {
-            String sqlState = psqlEx.getSQLState();
-            String message = psqlEx.getServerErrorMessage() != null
-                    ? psqlEx.getServerErrorMessage().getConstraint()
-                    : null;
 
-            if ("23505".equals(sqlState)) {
-                if (message != null && message.contains("email")) {
-                    throw new AlreadyExistException("Email %s already exist.".formatted(dto.email()));
-                }
-            }
-        }
-        throw e;
-    }
+
 
 
 }

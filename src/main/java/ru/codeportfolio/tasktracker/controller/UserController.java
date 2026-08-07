@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<JwtAuthenticationDto> createUser(
-                                              @Valid @RequestBody RequestRegistrationDto req) {
+            @Valid @RequestBody RequestRegistrationDto req) {
 
         UserDto userDto = service.createUser(req);
 

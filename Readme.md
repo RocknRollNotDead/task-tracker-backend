@@ -1,6 +1,6 @@
 # Планировщик задач
 
-Седьмой учебный проект из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
+Шестой (седьмой по старому счёту) учебный проект из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
 [ТЗ проекта](https://zhukovsd.github.io/java-backend-learning-course/projects/task-tracker/).
 
 Планирую деплоить на https://task-tracker.codeportfolio.ru/ (ещё не думал об этом)
@@ -12,7 +12,7 @@
 **Backend**
 
 - Основной сервис, запросы от фронтенда идут только к нему
-- REST API на Spring Boot со Spring Security, а в качестве хранения используются postgresql
+- REST API на Spring Boot со Spring Security, а в качестве хранения данных используются postgresql
 
 **Frontend**
 
@@ -30,15 +30,14 @@
 
 **Сервис суммаризации**
 
-- Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API, скорее всего это будет либо Claude, либо бесплатный
-  Grok, находится
+- Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API с Nemotron от Nvidia, находится
   в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
 
 Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории.
 
 ## Функциональность
 
-Все эндпоинты находятся под общим путём `/api`. Пример: `/api/auth/sign-up`.
+Все эндпоинты бэкенда находятся под общим путём `/api`. Пример: `/api/auth/sign-up`.
 
 ---
 
