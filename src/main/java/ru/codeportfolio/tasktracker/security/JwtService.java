@@ -49,17 +49,16 @@ public class JwtService {
 
     public boolean isTokenValid(String token) {
         try {
-            getClaims(token);
-            return !isTokenExpired(token);
+            Claims tokenClaim = getClaims(token);
+            return !isTokenExpired(tokenClaim);
         } catch (JwtException e) {
-            log.error(e.getLocalizedMessage(), e);
             return false;
         }
     }
 
 
-    private boolean isTokenExpired(String token) {
-        return getClaims(token).getExpiration().before(new Date());
+    private boolean isTokenExpired(Claims tokenClaim) {
+        return tokenClaim.getExpiration().before(new Date());
     }
 
     private Claims getClaims(String token) {
