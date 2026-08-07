@@ -25,7 +25,7 @@ public class Task {
     private String text;
 
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
 
     @Column(nullable = false)
