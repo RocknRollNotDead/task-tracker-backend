@@ -33,7 +33,9 @@
 - Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API с Nemotron от Nvidia, находится
   в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
 
-Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории.
+Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории. 
+Все репозитории при пуше собирают образ на https://hub.docker.com/appleapplenotdead
+Деплой у меня происходит по кнопке в Actions репозитории бэкенда.
 
 ## Функциональность
 
@@ -109,6 +111,9 @@ sudo apt install -y docker.io docker-compose-v2
 sudo snap install docker
 ```
 
+
+
+
 **2.2 собрать Dockerfile и docker-compose.yml**
 
 ```yaml
@@ -116,10 +121,10 @@ services:
   db:
     ...
   app:
-    image: ghcr.io/usernameonhub/task-tracker-backend:latest
+    image: usernameondockerhub/task-tracker-backend:latest
     ...
   frontend:
-    image: ghcr.io/usernameonhub/task-tracker-frontend:latest
+    image: usernameondockerhub/task-tracker-frontend:latest
     ...
   service-2:
     image:
@@ -130,8 +135,13 @@ volumes:
 собрать образы, предварительно авторизовавшись на гитхаб/докерхаб с помощью токена
 
 ```bash
-docker build -t ghcr.io/usernameonhub/task-tracker-backend:latest .
-docker push -t ghcr.io/usernameonhub/task-tracker-backend:latest .
+docker login
+```
+
+
+```bash
+docker build -t usernameondockerhub/task-tracker-backend:latest .
+docker push -t usernameondockerhub/task-tracker-backend:latest .
 ```
 
 **2.3 отправить docker-compose на сервер**
@@ -203,6 +213,6 @@ acme сам получит SSL сертификат по переменным
 
 И после этого всё приложение будет доступно по https://task-tracker.codeportfolio.ru (https с SSL сертификатом)
 
-## О том, что изучу на этом проекте
+## О том, что изучил на этом проекте
 
 Spring Boot, JWT, Spring Scheduler, Spring Mail, Kafka и GitHub Actions (CI/CD)
