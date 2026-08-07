@@ -10,6 +10,7 @@ build/
 legacy
 frontend
 
+
 ### STS ###
 .apt_generated
 .classpath

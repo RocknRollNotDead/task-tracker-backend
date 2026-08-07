@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd tasker
+
+            git pull
+
+            docker-compose pull
+            docker-compose up -d --remove-orphans
