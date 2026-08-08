@@ -34,7 +34,7 @@
   в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
 
 Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории. 
-Все репозитории при пуше собирают образ на https://hub.docker.com/appleapplenotdead
+Все репозитории при пуше собирают образ на https://hub.docker.com/repositories/appleapplenotdead
 Деплой у меня происходит по кнопке в Actions в репозитории бэкенда.
 
 ## Функциональность
