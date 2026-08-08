@@ -3,7 +3,7 @@
 Шестой (седьмой по старому счёту) учебный проект из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
 [ТЗ проекта](https://zhukovsd.github.io/java-backend-learning-course/projects/task-tracker/).
 
-Планирую деплоить на https://task-tracker.codeportfolio.ru/ (ещё не думал об этом)
+Деплой на https://task-tracker.codeportfolio.ru/ (ещё не думал об этом)
 
 ## Стек и структура
 
