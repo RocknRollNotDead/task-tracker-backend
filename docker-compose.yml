@@ -1,0 +1,158 @@
+
+services:
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+
+
+  db:
+    image: postgres:16
+    container_name: mydb
+    environment:
+      POSTGRES_DB: task_db
+      POSTGRES_USER: ${DB_LOGIN}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U arturka -d mydb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    ports:
+      - "5432:5432"
+
+  kafka:
+    image: bitnamilegacy/kafka:3.9
+    ports:
+      - "9092"
+    env_file:
+      - .env.kafka
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1 || exit 1"
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+
+
+  frontend:
+    container_name: task-frontend
+    image: appleapplenotdead/task-tracker-frontend:latest
+    expose:
+      - "80"
+    environment:
+      VIRTUAL_HOST: task-tracker.codeportfolio.ru
+      LETSENCRYPT_HOST: task-tracker.codeportfolio.ru
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+
+  task-app:
+    container_name: task-app
+    image: appleapplenotdead/task-tracker-backend:latest
+    env_file:
+      - .env.backend # JWT + password for user
+      - .env # DB
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8082"
+
+  email-sender:
+    container_name: email-sender
+    image: appleapplenotdead/task-tracker-email-sender:latest
+    env_file:
+      - .env.email
+    expose:
+      - "8090"
+
+
+  scheduler:
+    container_name: scheduler
+    image: appleapplenotdead/task-tracker-scheduler:latest
+    env_file:
+      - .env
+    expose:
+      - "8091"
+
+
+  summarizer:
+    container_name: summarizer
+    image: appleapplenotdead/task-tracker-summarizer:latest
+    env_file:
+      - .env.ai
+    expose:
+      - "8092"
+
+
+  simulation:
+    container_name: simulation
+    image: ghcr.io/rocknrollnotdead/simulation:latest
+    expose:
+      - "8085"
+    environment:
+      PORT: 8085
+      VIRTUAL_HOST: simulation-project.codeportfolio.ru
+      VIRTUAL_PORT: 8085
+      LETSENCRYPT_HOST: simulation-project.codeportfolio.ru
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    env_file:
+      - .env.simulation
+
+  tomcat-app:
+    image: ghcr.io/rocknrollnotdead/tomcat-app:latest
+    env_file:
+      - .env
+    environment:
+      DB_URL: db:5432/tennis_scoreboard
+
+      DB_PATH: /var/lib/currency-exchange/database.db
+
+      VIRTUAL_HOST: codeportfolio.ru
+      VIRTUAL_PORT: 8080
+      VIRTUAL_PATH: /
+      LETSENCRYPT_HOST: codeportfolio.ru
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+
+    expose:
+      - "8080"
+    volumes:
+      - sqlite-data:/var/lib/currency-exchange
+
+
+
+volumes:
+  pgdata:
+  sqlite-data:
+
+  certs:
+  vhost:
+  html:
+  acme:
+
+
+
