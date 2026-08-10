@@ -80,7 +80,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8080:8082"
+      - "8080:8080"
 
   email-sender:
     container_name: email-sender
