@@ -33,7 +33,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U arturka -d mydb" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d mydb" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -152,7 +152,7 @@ services:
       - .env.cloud
       - .env
     depends_on:
-      mydb:
+      db:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -193,9 +193,8 @@ services:
     container_name: s3
     command: server /data --address ":9010" --console-address ":9011"
     restart: unless-stopped
-    environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: ${PASSWORD}
+    env_file:
+      - .env.minio
 
     expose:
       - "9010"

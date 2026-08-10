@@ -3,7 +3,7 @@
 Шестой (седьмой по старому счёту) учебный проект из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
 [ТЗ проекта](https://zhukovsd.github.io/java-backend-learning-course/projects/task-tracker/).
 
-Деплой на https://task-tracker.codeportfolio.ru/ (ещё не думал об этом)
+Деплой на https://task-tracker.codeportfolio.ru/
 
 ## Стек и структура
 
@@ -209,7 +209,7 @@ acme сам получит SSL сертификат по переменным
 буду деплоить,
 с перенаправлением на тот ip адрес, где будет развёрнут фронтенд.
 
-И после этого всё приложение будет доступно по https://task-tracker.codeportfolio.ru (https с SSL сертификатом)
+И после этого всё приложение доступно по https://task-tracker.codeportfolio.ru (https с SSL сертификатом)
 
 ## О том, что изучил на этом проекте
 
