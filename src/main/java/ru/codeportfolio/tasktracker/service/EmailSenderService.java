@@ -10,8 +10,8 @@ public class EmailSenderService {
     public final static String TEXT_WELCOME_MAIL_MUST_BE_FORMATTED = """
             
             Приветствуем, %s!
-            Вы зарегистрировались в нашем сервисе Task Ledger на сайте %s!
             
+            Вы зарегистрировались в нашем сервисе Task Ledger на сайте %s!
             Приятного пользования!
             
             """;
