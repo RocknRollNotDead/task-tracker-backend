@@ -1,6 +1,7 @@
 # Планировщик задач
 
-Шестой (седьмой по старому счёту) учебный проект из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
+Шестой (седьмой по старому счёту) учебный проект
+из [роадмапа Сергея Жукова](https://zhukovsd.github.io/java-backend-learning-course/).
 [ТЗ проекта](https://zhukovsd.github.io/java-backend-learning-course/projects/task-tracker/).
 
 Деплой на https://task-tracker.codeportfolio.ru/
@@ -30,10 +31,10 @@
 
 **Сервис суммаризации**
 
-- Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API с Nemotron от Nvidia, находится
-  в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
+- Помощник бэкенду, RPC API на Spring Boot с интеграцией AI API с Nemotron от Nvidia, интегрируется с помощью фреймворка
+  Spring AI, находится в [другом репозитории](https://github.com/RocknRollNotDead/task-tracker-summarizer)
 
-Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории. 
+Все сервисы кроме фронтенда общаются друг с другом по RPC через Kafka, и имеют отдельные репозитории.
 Все репозитории при пуше собирают образ на https://hub.docker.com/repositories/appleapplenotdead
 Деплой у меня происходит по кнопке в Actions в репозитории бэкенда.
 
@@ -111,7 +112,6 @@ sudo apt install -y docker.io docker-compose-v2
 sudo snap install docker
 ```
 
-
 **2.2 собрать Dockerfile и docker-compose.yml**
 
 ```yaml
@@ -135,7 +135,6 @@ volumes:
 ```bash
 docker login -u usernameondockerhub
 ```
-
 
 ```bash
 docker build -t usernameondockerhub/task-tracker-backend:latest .

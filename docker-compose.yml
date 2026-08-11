@@ -69,6 +69,9 @@ services:
       VIRTUAL_HOST: task-tracker.codeportfolio.ru
       LETSENCRYPT_HOST: task-tracker.codeportfolio.ru
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    depends_on:
+      task-app:
+          condition: service_healthy
 
   task-app:
     container_name: task-app
@@ -81,6 +84,12 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   email-sender:
     container_name: email-sender
@@ -89,6 +98,11 @@ services:
       - .env.email
     expose:
       - "8090"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      task-app:
+        condition: service_healthy
 
 
   scheduler:
@@ -98,6 +112,13 @@ services:
       - .env
     expose:
       - "8091"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      task-app:
+        condition: service_healthy
+      db:
+        condition: service_healthy
 
 
   summarizer:
@@ -107,7 +128,15 @@ services:
       - .env.ai
     expose:
       - "8092"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      task-app:
+        condition: service_healthy
 
+
+
+  # old projects:
 
   simulation:
     container_name: simulation
@@ -142,6 +171,10 @@ services:
       - "8080"
     volumes:
       - sqlite-data:/var/lib/currency-exchange
+
+    depends_on:
+      db:
+        condition: service_healthy
 
 
 

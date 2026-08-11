@@ -1,5 +1,6 @@
 package ru.codeportfolio.tasktracker.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,22 @@ import ru.codeportfolio.tasktracker.model.User;
 @Component
 public class UsersDbInitializer implements CommandLineRunner {
 
+    public static final String EMAIL_ADMIN = "1@a.ru";
+    public static final String EMAIL_USER = "2@a.ru";
+
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${secrets.admin-login}")
+    private String usernameAdmin;
+    @Value("${secrets.admin-password}")
+    private String passwordAdmin;
+
+    @Value("${secrets.user-login}")
+    private String usernameUser;
+    @Value("${secrets.user-password}")
+    private String passwordUser;
 
     public UsersDbInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -22,23 +37,21 @@ public class UsersDbInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-
-        String username = System.getenv("DB_LOGIN");
-        if (userRepository.findUsersByEmail("1@a.ru").isEmpty()) {
+        if (userRepository.findUsersByEmail(EMAIL_ADMIN).isEmpty()) {
             userRepository.save(new User(
-                            username,
-                            passwordEncoder.encode(System.getenv("DB_PASSWORD")),
+                            usernameAdmin,
+                            passwordEncoder.encode(passwordAdmin),
                             Role.ADMIN,
-                            "1@a.ru"
+                            EMAIL_ADMIN
                     )
             );
         }
-        if (userRepository.findUsersByEmail("2@a.ru").isEmpty()) {
+        if (userRepository.findUsersByEmail(EMAIL_USER).isEmpty()) {
             userRepository.save(new User(
-                            "User",
-                            passwordEncoder.encode(System.getenv("PASSWORD_USER")),
+                            usernameUser,
+                            passwordEncoder.encode(passwordUser),
                             Role.USER,
-                            "2@a.ru"
+                            EMAIL_USER
                     )
             );
         }

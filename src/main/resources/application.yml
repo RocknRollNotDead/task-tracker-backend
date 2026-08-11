@@ -22,8 +22,25 @@ spring:
   flyway:
     enabled: true
 
-secret-key:
-  ${SECRET_KEY_JWT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+secret-key: ${SECRET_KEY_JWT}
+
+secrets:
+  user-login: User
+  user-password: ${PASSWORD_USER:password123}
+  admin-login: ${DB_LOGIN:admin}
+  admin-password: ${DB_PASSWORD:admin123}
 
 kafka:
   url: ${LOCALHOST:kafka}:9092
