@@ -13,7 +13,6 @@ public class EmailSenderService {
             
             Вы зарегистрировались в нашем сервисе Task Ledger на сайте %s!
             Приятного пользования!
-            
             """;
     public final static String DOMAIN = "codeportfolio.ru";
     private final static String HEADER = "Приветственное письмо от Task Ledger";
