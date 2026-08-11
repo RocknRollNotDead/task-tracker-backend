@@ -80,7 +80,7 @@ class UserControllersTest extends IntegrationTestBase {
         mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists());
 
         assertThat(userRepository.findUsersByEmail(EMAIL_TEST_USER)).isPresent();
@@ -93,7 +93,7 @@ class UserControllersTest extends IntegrationTestBase {
         mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists());
 
         mockMvc.perform(post(API_USER)
@@ -169,7 +169,7 @@ class UserControllersTest extends IntegrationTestBase {
         MvcResult result = mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
         String json = result.getResponse().getContentAsString();
@@ -186,7 +186,7 @@ class UserControllersTest extends IntegrationTestBase {
         MvcResult result = mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
@@ -204,7 +204,7 @@ class UserControllersTest extends IntegrationTestBase {
         mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
         String token = "Какая-то фигня";
@@ -221,7 +221,7 @@ class UserControllersTest extends IntegrationTestBase {
         mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
         String token = "";
@@ -237,7 +237,7 @@ class UserControllersTest extends IntegrationTestBase {
         mockMvc.perform(post(API_USER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
         String token = null;

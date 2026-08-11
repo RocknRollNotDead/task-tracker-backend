@@ -34,7 +34,8 @@ management:
       probes:
         enabled: true
 
-secret-key: ${SECRET_KEY_JWT}
+secret-key:
+  ${SECRET_KEY_JWT}
 
 secrets:
   user-login: User
