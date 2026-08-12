@@ -35,7 +35,6 @@ public class UserSaverService {
         }
     }
 
-
     private static void throwSaveException(RequestRegistrationDto dto, DataIntegrityViolationException e) {
         Throwable rootCause = e.getMostSpecificCause();
 

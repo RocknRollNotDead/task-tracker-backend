@@ -5,10 +5,11 @@ import org.springframework.stereotype.Repository;
 import ru.codeportfolio.tasktracker.model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> getTasksByOwner_Id(Long ownerId);
 
-    Task getTaskById(Long id);
+    Optional<Task> findByIdAndOwner_Id(Long taskId, Long userId);
 }

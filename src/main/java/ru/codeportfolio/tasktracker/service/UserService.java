@@ -1,20 +1,15 @@
 package ru.codeportfolio.tasktracker.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.util.PSQLException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
 import ru.codeportfolio.tasktracker.dto.http.request.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.dto.http.response.UserDto;
-import ru.codeportfolio.tasktracker.exception.entity.AlreadyExistException;
 import ru.codeportfolio.tasktracker.exception.entity.NotFoundException;
-import ru.codeportfolio.tasktracker.model.Role;
 import ru.codeportfolio.tasktracker.model.User;
 import ru.codeportfolio.tasktracker.util.UserMapper;
-
 
 
 @Slf4j
@@ -59,10 +54,6 @@ public class UserService {
 
         return new UserDto(user.getId(), user.getUsername(), user.getEmail());
     }
-
-
-
-
 
 
 }

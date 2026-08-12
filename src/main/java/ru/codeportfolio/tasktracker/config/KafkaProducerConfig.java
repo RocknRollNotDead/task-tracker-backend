@@ -15,7 +15,7 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    public final String kafkaUrl;
+    private final String kafkaUrl;
 
     public KafkaProducerConfig(@Value("${kafka.url}") String kafkaUrl) {
         this.kafkaUrl = kafkaUrl;

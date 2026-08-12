@@ -20,7 +20,7 @@ public final class TaskMapper {
                 task.getTimestamp());
     }
 
-    public static List<TaskDto> MapList(List<Task> tasks) {
+    public static List<TaskDto> mapList(List<Task> tasks) {
         return tasks.stream().map(TaskMapper::execute).toList();
     }
 

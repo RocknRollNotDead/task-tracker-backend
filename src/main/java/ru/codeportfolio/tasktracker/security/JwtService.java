@@ -28,6 +28,9 @@ public class JwtService {
     @Value("${secret-key}")
     private String secretKey;
 
+    private static @NonNull Date getDateExpireToken(int hours) {
+        return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
+    }
 
     public JwtAuthenticationDto generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto(
@@ -36,29 +39,35 @@ public class JwtService {
         return jwtDto;
     }
 
-
     public JwtClaimsDto getJwtClaimsDtoFromToken(String token) {
         Claims claims = getClaims(token);
-        List<String> roles = claims.get("authorities", List.class);
-        return new JwtClaimsDto(
-                claims.get("id", Long.class),
-                claims.getSubject(),
-                roles.stream().map(SimpleGrantedAuthority::new).toList()
-        );
+        return getJwtClaimsDtoFromClaim(claims);
     }
 
     public boolean isTokenValid(String token) {
         try {
             Claims tokenClaim = getClaims(token);
+            getJwtClaimsDtoFromClaim(tokenClaim);
             return !isTokenExpired(tokenClaim);
-        } catch (JwtException e) {
+        } catch (JwtException | ClassCastException | NullPointerException e) {
             return false;
         }
     }
 
-
     private boolean isTokenExpired(Claims tokenClaim) {
         return tokenClaim.getExpiration().before(new Date());
+    }
+
+    private @NonNull JwtClaimsDto getJwtClaimsDtoFromClaim(Claims claims) {
+        List<String> roles = claims.get("authorities", List.class);
+        List<SimpleGrantedAuthority> grantedAuthorityList =
+                roles.stream().map(SimpleGrantedAuthority::new).toList();
+
+        return new JwtClaimsDto(
+                claims.get("id", Long.class),
+                claims.getSubject(),
+                grantedAuthorityList
+        );
     }
 
     private Claims getClaims(String token) {
@@ -84,11 +93,6 @@ public class JwtService {
                 .signWith(getSignInKey())
                 .compact();
     }
-
-    private static @NonNull Date getDateExpireToken(int hours) {
-        return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
-    }
-
 
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

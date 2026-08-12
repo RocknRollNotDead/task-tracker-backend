@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.codeportfolio.tasktracker.dto.http.request.RequestAuthDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.security.CustomUserDetails;
-import ru.codeportfolio.tasktracker.service.AuthenticationService;
 import ru.codeportfolio.tasktracker.security.JwtService;
+import ru.codeportfolio.tasktracker.service.AuthenticationService;
 
 
 @RestController

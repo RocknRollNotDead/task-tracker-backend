@@ -10,8 +10,8 @@ import ru.codeportfolio.tasktracker.dto.http.request.RequestRegistrationDto;
 import ru.codeportfolio.tasktracker.dto.http.response.UserDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.security.CustomUserDetails;
-import ru.codeportfolio.tasktracker.service.AuthenticationService;
 import ru.codeportfolio.tasktracker.security.JwtService;
+import ru.codeportfolio.tasktracker.service.AuthenticationService;
 import ru.codeportfolio.tasktracker.service.UserService;
 
 

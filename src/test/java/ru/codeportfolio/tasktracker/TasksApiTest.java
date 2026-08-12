@@ -14,7 +14,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import ru.codeportfolio.tasktracker.dao.TaskRepository;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
-import ru.codeportfolio.tasktracker.model.*;
+import ru.codeportfolio.tasktracker.model.Role;
+import ru.codeportfolio.tasktracker.model.Status;
+import ru.codeportfolio.tasktracker.model.Task;
+import ru.codeportfolio.tasktracker.model.User;
 import ru.codeportfolio.tasktracker.security.CustomUserDetails;
 
 import java.util.List;
@@ -28,35 +31,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TasksApiTest extends IntegrationTestBase {
 
     public static final String API_TASKS = "/tasks";
-
-
+    public static final String TEST_TASK_NAME = "Test task";
+    public static final String TEST_TASK_TEXT = "Test task text";
+    public static final String REQUEST_BODY_JSON =
+            """
+                    {
+                        "name": "%s",
+                        "text": "%s"
+                    }
+                    """;
     private final static String EMAIL_TEST_USER = "4@a.ru";
     private final static String PASSWORD_TEST_USER = "password";
     private final static String USERNAME_TEST_USER = "test-user";
-    public static final String TEST_TASK_NAME = "Test task";
-    public static final String TEST_TASK_TEXT = "Test task text";
+    @Autowired
+    MockMvc mockMvc;
     private UsernamePasswordAuthenticationToken token;
-    public static final String REQUEST_BODY_JSON =
-            """
-            {
-                "name": "%s",
-                "text": "%s"
-            }
-            """;
-
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TaskRepository taskRepository;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    MockMvc mockMvc;
+    @BeforeAll
+    static void setUp() {
 
+    }
+
+    private static @NonNull ResultMatcher checkExistErrorMessage() {
+        return jsonPath("$.message").exists();
+    }
 
     @BeforeEach
     void createTestUser() {
@@ -76,12 +80,6 @@ class TasksApiTest extends IntegrationTestBase {
         taskRepository.deleteAll();
     }
 
-    @BeforeAll
-    static void setUp() {
-
-    }
-
-
     @Test
     void shouldCreateTask() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -93,7 +91,6 @@ class TasksApiTest extends IntegrationTestBase {
 
     }
 
-
     @Test
     void notShouldCreateTask() throws Exception {
         createTask("", TEST_TASK_TEXT)
@@ -102,7 +99,6 @@ class TasksApiTest extends IntegrationTestBase {
         ;
 
     }
-
 
     @Test
     void notShouldCreateTask_unauth() throws Exception {
@@ -193,7 +189,6 @@ class TasksApiTest extends IntegrationTestBase {
         ;
     }
 
-
     @Test
     public void editTask() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -227,7 +222,6 @@ class TasksApiTest extends IntegrationTestBase {
                 .andExpect(status().isNotFound());
     }
 
-
     @Test
     public void notEditTaskNoName() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -242,7 +236,6 @@ class TasksApiTest extends IntegrationTestBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(checkExistErrorMessage());
     }
-
 
     @Test
     public void notEditTaskBlankName() throws Exception {
@@ -292,7 +285,6 @@ class TasksApiTest extends IntegrationTestBase {
         ;
     }
 
-
     @Test
     public void deleteTask() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -314,7 +306,6 @@ class TasksApiTest extends IntegrationTestBase {
 
     }
 
-
     @Test
     public void notDeleteTaskNotFound() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -329,7 +320,6 @@ class TasksApiTest extends IntegrationTestBase {
         ;
     }
 
-
     @Test
     public void notDeleteTaskUnauthorized() throws Exception {
         createTask(TEST_TASK_NAME, TEST_TASK_TEXT)
@@ -342,12 +332,6 @@ class TasksApiTest extends IntegrationTestBase {
                 .andExpect(checkExistErrorMessage())
         ;
     }
-
-
-    private static @NonNull ResultMatcher checkExistErrorMessage() {
-        return jsonPath("$.message").exists();
-    }
-
 
     private void expectTaskWithStatus(Status status) throws Exception {
         mockMvc.perform(get(API_TASKS)

@@ -43,7 +43,7 @@ public class TaskService {
         tasks.sort(Comparator.comparing(
                 Task::getTimestamp,
                 Comparator.nullsLast(Comparator.reverseOrder())));
-        return TaskMapper.MapList(tasks);
+        return TaskMapper.mapList(tasks);
     }
 
 
@@ -68,11 +68,8 @@ public class TaskService {
     }
 
     private @NonNull Task getUserTask(Long userId, Long taskId) {
-        Task task = taskRepository.getTaskById(taskId);
-        if (task == null || !task.getOwner().getId().equals(userId)) {
-            throw new NotFoundException("Not found in your task!");
-        }
-        return task;
+        return taskRepository.findByIdAndOwner_Id(taskId, userId)
+                .orElseThrow(() -> new NotFoundException("Not found in your task!"));
     }
 
 
