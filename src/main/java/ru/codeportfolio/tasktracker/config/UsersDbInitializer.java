@@ -3,6 +3,8 @@ package ru.codeportfolio.tasktracker.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.codeportfolio.tasktracker.config.properties.AdminProperties;
+import ru.codeportfolio.tasktracker.config.properties.UserProperties;
 import ru.codeportfolio.tasktracker.dao.UserRepository;
 import ru.codeportfolio.tasktracker.model.Role;
 import ru.codeportfolio.tasktracker.model.User;

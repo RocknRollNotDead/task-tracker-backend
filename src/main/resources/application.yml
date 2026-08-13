@@ -33,9 +33,10 @@ management:
     health:
       probes:
         enabled: true
+jwt:
+  secret-key:
+    ${SECRET_KEY_JWT}
 
-secret-key:
-  ${SECRET_KEY_JWT}
 
 secrets:
   user:

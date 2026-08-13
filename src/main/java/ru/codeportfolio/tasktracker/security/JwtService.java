@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import ru.codeportfolio.tasktracker.config.properties.JwtProperties;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtClaimsDto;
 
@@ -25,8 +26,11 @@ import java.util.List;
 @Component
 public class JwtService {
 
-    @Value("${secret-key}")
-    private String secretKey;
+    private final String secretKey;
+
+    public JwtService(JwtProperties properties) {
+        this.secretKey = properties.secretKey();
+    }
 
     private static @NonNull Date getDateExpireToken(int hours) {
         return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
