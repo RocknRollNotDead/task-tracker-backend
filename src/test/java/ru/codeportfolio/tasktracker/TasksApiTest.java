@@ -43,6 +43,7 @@ class TasksApiTest extends IntegrationTestBase {
     private final static String EMAIL_TEST_USER = "4@a.ru";
     private final static String PASSWORD_TEST_USER = "password";
     private final static String USERNAME_TEST_USER = "test-user";
+    public static final String TASK_ID = "taskId";
     @Autowired
     MockMvc mockMvc;
     private UsernamePasswordAuthenticationToken token;
@@ -161,7 +162,7 @@ class TasksApiTest extends IntegrationTestBase {
     public void notChangeStatusTask() throws Exception {
         mockMvc.perform(patch(API_TASKS)
                         .with(authentication(token))
-                        .param("taskId", "234")
+                        .param(TASK_ID, "234")
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(checkExistErrorMessage())
@@ -172,7 +173,7 @@ class TasksApiTest extends IntegrationTestBase {
     public void notChangeStatusTaskNotConvertId() throws Exception {
         mockMvc.perform(patch(API_TASKS)
                         .with(authentication(token))
-                        .param("taskId", "ыыыыыыыЫ")
+                        .param(TASK_ID, "ыыыыыыыЫ")
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(checkExistErrorMessage())
@@ -182,7 +183,7 @@ class TasksApiTest extends IntegrationTestBase {
     @Test
     public void notChangeStatusTask_unauth() throws Exception {
         mockMvc.perform(patch(API_TASKS)
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                 )
                 .andExpect(status().isUnauthorized())
                 .andExpect(checkExistErrorMessage())
@@ -196,7 +197,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(patch(API_TASKS + "/edit")
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("edited task", "edited text task"))
                 )
@@ -215,7 +216,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(patch(API_TASKS + "/edit")
                         .with(authentication(token))
-                        .param("taskId", "1234")
+                        .param(TASK_ID, "1234")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("edited task", "edited text task"))
                 )
@@ -229,7 +230,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(patch(API_TASKS + "/edit")
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("", "edited text task"))
                 )
@@ -244,7 +245,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(patch(API_TASKS + "/edit")
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("          ", "edited text task"))
                 )
@@ -259,7 +260,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(patch(API_TASKS + "/edit")
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("name req", ""))
                 )
@@ -276,7 +277,7 @@ class TasksApiTest extends IntegrationTestBase {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(patch(API_TASKS + "/edit")
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(REQUEST_BODY_JSON.formatted("name req", ""))
                 )
@@ -292,7 +293,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(delete(API_TASKS)
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                 )
                 .andExpect(status().isNoContent())
         ;
@@ -313,7 +314,7 @@ class TasksApiTest extends IntegrationTestBase {
 
         mockMvc.perform(delete(API_TASKS)
                         .with(authentication(token))
-                        .param("taskId", "12344")
+                        .param(TASK_ID, "12344")
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(checkExistErrorMessage())
@@ -326,7 +327,7 @@ class TasksApiTest extends IntegrationTestBase {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete(API_TASKS)
-                        .param("taskId", "12344")
+                        .param(TASK_ID, "12344")
                 )
                 .andExpect(status().isUnauthorized())
                 .andExpect(checkExistErrorMessage())
@@ -346,7 +347,7 @@ class TasksApiTest extends IntegrationTestBase {
     private void changeStatusTask() throws Exception {
         mockMvc.perform(patch(API_TASKS)
                         .with(authentication(token))
-                        .param("taskId", getTaskId())
+                        .param(TASK_ID, getTaskId())
                 )
                 .andExpect(status().isOk());
     }

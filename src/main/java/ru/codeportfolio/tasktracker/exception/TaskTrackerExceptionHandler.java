@@ -44,12 +44,6 @@ public class TaskTrackerExceptionHandler {
                 "Validation error! %s".formatted(e.getDetailMessageArguments()));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, String>> handleGeneric(BadCredentialsException e) {
-
-        return buildResponse(HttpStatus.UNAUTHORIZED, "Not right login or password! ");
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleGeneric(MethodArgumentNotValidException e) {
         String message = e.getBindingResult()
