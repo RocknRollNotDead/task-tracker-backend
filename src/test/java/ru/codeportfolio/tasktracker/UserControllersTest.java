@@ -75,7 +75,7 @@ class UserControllersTest extends IntegrationTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists());
 
-        assertThat(userRepository.findUsersByEmail(EMAIL_TEST_USER)).isPresent();
+        assertThat(userRepository.findByEmail(EMAIL_TEST_USER)).isPresent();
     }
 
     @Test
@@ -94,7 +94,7 @@ class UserControllersTest extends IntegrationTestBase {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").exists());
 
-        assertThat(userRepository.findUsersByEmail(EMAIL_TEST_USER)).isPresent();
+        assertThat(userRepository.findByEmail(EMAIL_TEST_USER)).isPresent();
     }
 
 
@@ -108,7 +108,7 @@ class UserControllersTest extends IntegrationTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(USERNAME_TEST_USER));
 
-        assertThat(userRepository.findUsersByEmail(EMAIL_TEST_USER)).isPresent();
+        assertThat(userRepository.findByEmail(EMAIL_TEST_USER)).isPresent();
     }
 
     @Test
@@ -263,7 +263,7 @@ class UserControllersTest extends IntegrationTestBase {
 
 
     private void createTestUser() {
-        User user = userRepository.findUsersByEmail(EMAIL_TEST_USER)
+        User user = userRepository.findByEmail(EMAIL_TEST_USER)
                 .orElseGet(() -> userRepository.save(new User(
                         USERNAME_TEST_USER,
                         passwordEncoder.encode(PASSWORD_TEST_USER),

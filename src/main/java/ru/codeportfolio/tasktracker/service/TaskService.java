@@ -39,7 +39,7 @@ public class TaskService {
     }
 
     public List<TaskDto> get(Long userId) {
-        List<Task> tasks = taskRepository.getTasksByOwner_IdOrderByTimestampDesc(userId);
+        List<Task> tasks = taskRepository.findByOwnerIdOrderByTimestampDesc(userId);
         return TaskMapper.mapList(tasks);
     }
 
@@ -65,7 +65,7 @@ public class TaskService {
     }
 
     private @NonNull Task getUserTask(Long userId, Long taskId) {
-        return taskRepository.findByIdAndOwner_Id(taskId, userId)
+        return taskRepository.findByIdAndOwnerId(taskId, userId)
                 .orElseThrow(() -> new NotFoundException("Not found in your task!"));
     }
 

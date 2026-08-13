@@ -64,7 +64,7 @@ class TasksApiTest extends IntegrationTestBase {
 
     @BeforeEach
     void createTestUser() {
-        User user = userRepository.findUsersByEmail(EMAIL_TEST_USER)
+        User user = userRepository.findByEmail(EMAIL_TEST_USER)
                 .orElseGet(() -> userRepository.save(new User(
                         USERNAME_TEST_USER,
                         passwordEncoder.encode(PASSWORD_TEST_USER),
@@ -353,9 +353,8 @@ class TasksApiTest extends IntegrationTestBase {
 
     private String getTaskId() {
 
-
-        List<Task> tasks = taskRepository.getTasksByOwner_Id(
-                userRepository.findUsersByEmail(EMAIL_TEST_USER).orElseThrow()
+        List<Task> tasks = taskRepository.findByOwner_Id(
+                userRepository.findByEmail(EMAIL_TEST_USER).orElseThrow()
                         .getId());
 
         if (tasks.isEmpty()) {
