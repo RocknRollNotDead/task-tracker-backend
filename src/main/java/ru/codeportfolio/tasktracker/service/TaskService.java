@@ -39,10 +39,7 @@ public class TaskService {
     }
 
     public List<TaskDto> get(Long userId) {
-        List<Task> tasks = taskRepository.getTasksByOwner_Id(userId);
-        tasks.sort(Comparator.comparing(
-                Task::getTimestamp,
-                Comparator.nullsLast(Comparator.reverseOrder())));
+        List<Task> tasks = taskRepository.getTasksByOwner_IdOrderByTimestampDesc(userId);
         return TaskMapper.mapList(tasks);
     }
 
