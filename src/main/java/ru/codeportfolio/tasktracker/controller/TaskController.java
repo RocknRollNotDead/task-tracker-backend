@@ -1,6 +1,7 @@
 package ru.codeportfolio.tasktracker.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,11 +27,8 @@ public class TaskController {
     @PostMapping()
     public ResponseEntity<TaskDto> createTask(
             @AuthenticationPrincipal CustomUserDetails principal,
+            @NotNull(message = "Bad request - no body")
             @Valid @RequestBody(required = false) RequestTaskDto request) {
-
-        if (request == null) {
-            throw new ValidationException("Bad request - no body");
-        }
 
         TaskDto taskDto = service.create(principal.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskDto);
@@ -45,21 +43,22 @@ public class TaskController {
 
     @PatchMapping()
     public ResponseEntity<TaskDto> executeTask(@AuthenticationPrincipal CustomUserDetails principal,
-                                               @RequestParam Long taskId) {
+                                               @NotNull @RequestParam Long taskId) {
         TaskDto dto = service.patch(principal.getId(), taskId);
         return ResponseEntity.ok(dto);
     }
 
     @PatchMapping("/edit")
     public ResponseEntity<TaskDto> editTask(@AuthenticationPrincipal CustomUserDetails principal,
-                                            @RequestParam Long taskId,
-                                            @Valid @RequestBody RequestTaskDto dto) {
+                                            @NotNull @RequestParam Long taskId,
+                                            @NotNull @Valid @RequestBody RequestTaskDto dto) {
         TaskDto taskDto = service.edit(principal.getId(), taskId, dto);
         return ResponseEntity.ok(taskDto);
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> deleteTask(@AuthenticationPrincipal CustomUserDetails principal, @RequestParam Long taskId) {
+    public ResponseEntity<Void> deleteTask(@AuthenticationPrincipal CustomUserDetails principal,
+                                           @NotNull @RequestParam Long taskId) {
         service.delete(principal.getId(), taskId);
         return ResponseEntity.noContent().build();
     }
