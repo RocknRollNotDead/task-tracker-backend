@@ -5,14 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "secrets.admin")
-public record AdminProperties(
+@ConfigurationProperties(prefix = "kafka")
+public record KafkaProperties(
         @NotBlank
-        String username,
+        String url,
+
         @NotBlank
-        String password,
-        @NotBlank
-        String email
+        String producerName
 ) {
 }
 

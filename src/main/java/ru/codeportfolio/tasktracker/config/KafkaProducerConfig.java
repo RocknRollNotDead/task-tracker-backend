@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import ru.codeportfolio.tasktracker.config.properties.KafkaProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +17,12 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     private final String kafkaUrl;
+    private final String producerName;
 
-    public KafkaProducerConfig(@Value("${kafka.url}") String kafkaUrl) {
-        this.kafkaUrl = kafkaUrl;
+    public KafkaProducerConfig(KafkaProperties kafkaProperties) {
+        this.kafkaUrl = kafkaProperties.url();
+        this.producerName = kafkaProperties.producerName();
+
     }
 
     @Bean
@@ -28,7 +32,7 @@ public class KafkaProducerConfig {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
-        config.put(ProducerConfig.CLIENT_ID_CONFIG, "main-backend-producer");
+        config.put(ProducerConfig.CLIENT_ID_CONFIG, producerName);
 
         config.put(ProducerConfig.ACKS_CONFIG, "all");
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);

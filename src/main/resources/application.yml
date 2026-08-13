@@ -37,16 +37,6 @@ jwt:
   secret-key:
     ${SECRET_KEY_JWT}
 
-
-secrets:
-  user:
-    username: User
-    password:  ${PASSWORD_USER}
-    email: 2@a.ru
-  admin:
-    username: ${DB_LOGIN}
-    password: ${DB_PASSWORD}
-    email: 1@a.ru
-
 kafka:
   url: ${LOCALHOST:kafka}:9092
+  producer-name: main-backend-producer
