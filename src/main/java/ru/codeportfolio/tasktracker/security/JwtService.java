@@ -16,6 +16,8 @@ import ru.codeportfolio.tasktracker.dto.jwt.JwtAuthenticationDto;
 import ru.codeportfolio.tasktracker.dto.jwt.JwtClaimsDto;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -27,13 +29,15 @@ import java.util.List;
 public class JwtService {
 
     private final String secretKey;
+    private final Duration ttl;
 
     public JwtService(JwtProperties properties) {
         this.secretKey = properties.secretKey();
+        this.ttl = properties.ttl();
     }
 
-    private static @NonNull Date getDateExpireToken(int hours) {
-        return Date.from(LocalDateTime.now().plusHours(hours).atZone(ZoneId.systemDefault()).toInstant());
+    private @NonNull Date getDateExpireToken() {
+        return Date.from(Instant.now().plus(ttl));
     }
 
     public JwtAuthenticationDto generateJwtToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
@@ -83,7 +87,7 @@ public class JwtService {
     }
 
     private String generateAuthToken(String email, Collection<? extends GrantedAuthority> authorities, Long id) {
-        Date date = getDateExpireToken(16);
+        Date date = getDateExpireToken();
 
         List<String> roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)

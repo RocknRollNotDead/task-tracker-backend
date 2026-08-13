@@ -36,6 +36,7 @@ management:
 jwt:
   secret-key:
     ${SECRET_KEY_JWT}
+  ttl: 2d
 
 kafka:
   url: ${LOCALHOST:kafka}:9092
