@@ -27,7 +27,7 @@ public class TaskService {
     }
 
     public TaskDto create(Long userId, RequestTaskDto taskDto) {
-        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User from session not found!"));
+        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found!"));
 
         Task task = taskRepository.save(new Task(
                 taskDto.name(),
