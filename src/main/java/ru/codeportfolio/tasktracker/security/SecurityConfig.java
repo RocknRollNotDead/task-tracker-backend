@@ -1,7 +1,7 @@
 package ru.codeportfolio.tasktracker.security;
 
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,22 +18,17 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
-@Slf4j
 @Configuration
 @EnableWebSecurity
-
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final JwtFilter jwtFilter;
 
-    public SecurityConfig(ObjectMapper objectMapper, JwtFilter jwtFilter) {
-        this.objectMapper = objectMapper;
-        this.jwtFilter = jwtFilter;
-    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -73,7 +68,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 
