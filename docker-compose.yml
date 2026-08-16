@@ -39,7 +39,7 @@ services:
       retries: 10
 
     ports:
-      - "5432:5432"
+      - "5432"
 
   kafka:
     image: bitnamilegacy/kafka:3.9
@@ -85,7 +85,7 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/api/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
