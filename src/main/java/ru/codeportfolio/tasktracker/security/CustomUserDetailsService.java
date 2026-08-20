@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepository
-                .findUsersByEmail(email)
+                .findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email not exist " + email));
         return new CustomUserDetails(user);
     }

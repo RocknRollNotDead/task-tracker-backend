@@ -9,9 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> getTasksByOwner_Id(Long ownerId);
 
-    Optional<Task> findByIdAndOwner_Id(Long taskId, Long userId);
+    List<Task> findByOwner_Id(Long ownerId);
 
-    List<Task> getTasksByOwner_IdOrderByTimestampDesc(Long ownerId);
+    Optional<Task> findByIdAndOwnerId(Long taskId, Long userId);
+
+    List<Task> findByOwnerIdOrderByTimestampDesc(Long ownerId);
 }

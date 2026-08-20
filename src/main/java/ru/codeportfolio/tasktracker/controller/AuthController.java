@@ -20,36 +20,24 @@ import ru.codeportfolio.tasktracker.service.AuthenticationService;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
-    private final JwtService jwtService;
 
-    public AuthController(AuthenticationService authenticationService, JwtService jwtService) {
+    public AuthController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.jwtService = jwtService;
     }
 
 
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationDto> logIn(@Valid @RequestBody RequestAuthDto req) {
 
-        CustomUserDetails principal = authenticationService.auth(req);
-
-        JwtAuthenticationDto jwtDto = jwtService.generateJwtToken(
-                principal.getEmail(),
-                principal.getAuthorities(),
-                principal.getId()
-        );
+        JwtAuthenticationDto jwtDto = authenticationService.auth(req);
 
         return ResponseEntity.ok(jwtDto);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logOut(
-            @AuthenticationPrincipal CustomUserDetails principal) {
-        if (principal == null) {
-            throw new BadCredentialsException("Impossible logout because you not authorized.");
-        } else {
+            ) {
             return ResponseEntity.noContent().build();
-        }
     }
 
 

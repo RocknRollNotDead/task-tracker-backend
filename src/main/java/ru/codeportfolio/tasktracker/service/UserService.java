@@ -33,7 +33,7 @@ public class UserService {
 
 
         String password = passwordEncoder.encode(dto.password());
-        User user = userSaverService.saveUserToRepository(dto, password);
+        User user = userSaverService.execute(dto, password);
 
         try {
             emailSenderService.sendWelcomeEmail(dto.email(), dto.username());
@@ -50,7 +50,7 @@ public class UserService {
     public UserDto getInfo(Long id) {
 
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("User not found in db"));
+                () -> new NotFoundException("User not found"));
 
         return new UserDto(user.getId(), user.getUsername(), user.getEmail());
     }

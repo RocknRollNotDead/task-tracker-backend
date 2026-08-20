@@ -21,12 +21,10 @@ public class UserController {
 
     private final UserService service;
     private final AuthenticationService authenticationService;
-    private final JwtService jwtService;
 
-    public UserController(UserService service, AuthenticationService authenticationService, JwtService jwtService) {
+    public UserController(UserService service, AuthenticationService authenticationService) {
         this.service = service;
         this.authenticationService = authenticationService;
-        this.jwtService = jwtService;
     }
 
     @PostMapping()
@@ -35,14 +33,8 @@ public class UserController {
 
         UserDto userDto = service.createUser(req);
 
-        CustomUserDetails principal = authenticationService.auth(
+        JwtAuthenticationDto jwtDto = authenticationService.auth(
                 new RequestAuthDto(req.email(), req.password()));
-
-        JwtAuthenticationDto jwtDto = jwtService.generateJwtToken(
-                principal.getEmail(),
-                principal.getAuthorities(),
-                principal.getId()
-        );
 
         return ResponseEntity.ok(jwtDto);
     }

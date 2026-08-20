@@ -21,7 +21,7 @@ public class UserSaverService {
     }
 
     @Transactional
-    public User saveUserToRepository(RequestRegistrationDto dto, String password) {
+    public User execute(RequestRegistrationDto dto, String password) {
         try {
             return userRepository.save(new User(
                     dto.username(),
