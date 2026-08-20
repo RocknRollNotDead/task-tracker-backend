@@ -56,6 +56,12 @@ public class TaskTrackerExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleGeneric(BadCredentialsException e) {
+
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Not right login or password! ");
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleGeneric(NotFoundException e) {
         return buildResponse(HttpStatus.NOT_FOUND, e.getMessage());
